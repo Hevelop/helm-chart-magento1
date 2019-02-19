@@ -20,8 +20,6 @@ spec:
     metadata:
       labels:
         app: {{ template "magento.fullname" . }}
-        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-        release: "{{ .Release.Name }}"
     spec:
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
