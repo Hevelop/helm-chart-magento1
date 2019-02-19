@@ -34,7 +34,6 @@ spec:
       - name: {{ template "magento.fullname" . }}-httpd
         image: {{ template "httpd.image" . }}
         imagePullPolicy: {{ .Values.httpd.pullPolicy | quote }}
-        image: hevelop-docker.jfrog.io/hevelop/httpd-m1-prod:0.0.1
         env:
         - name: URL_ARCHIVE
           value: "{{ template "artifactFullUrl" . }}"
