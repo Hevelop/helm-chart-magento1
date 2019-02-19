@@ -1,0 +1,9 @@
+dependencies:
+- name: mariadb
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 5.5.2
+- name: efs-provisioner
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 0.2.0
+digest: sha256:1abe1a412275e2cbd0a02483020c66401dbe99c1cffbe0ced03189530dd298e4
+generated: 2019-02-19T12:56:18.644421+01:00

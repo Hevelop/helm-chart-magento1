@@ -1,0 +1,36 @@
+{{/* vim: set filetype=mustache: */}}
+{{/*
+Expand the name of the chart.
+*/}}
+{{- define "magento.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "magento.fullname" -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Return the proper Magento httpd image name
+*/}}
+{{- define "httpd.image" -}}
+{{- $registryName := .Values.httpd.registry -}}
+{{- $repositoryName := .Values.httpd.repository -}}
+{{- $tag := .Values.httpd.tag | toString -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+
+{{/*
+Return the proper Magento php-fpm image name
+*/}}
+{{- define "phpFpm.image" -}}
+{{- $registryName := .Values.phpfpm.registry -}}
+{{- $repositoryName := .Values.phpFpm.repository -}}
+{{- $tag := .Values.phpFpm.tag | toString -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}

@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "magento.fullname" . }}-ingress
+  {{- if .Values.loadBalancer.annotations }}
+  annotations:
+{{ toYaml .Values.loadBalancer.annotations | indent 4 }}  
+  {{- end }}
+  labels:
+    app: {{ template "magento.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  rules:
+    - host: "{{ .Value.host }}"
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: {{ template "magento.fullname" . }}
+              servicePort: 80  
