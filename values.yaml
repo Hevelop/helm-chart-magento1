@@ -1,11 +1,13 @@
 stage: staging
 
+global:
 ## Optionally specify an array of imagePullSecrets.
 ## Secrets must be manually created in the namespace.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 ##
 # pullSecrets:
 #   - myRegistrKeySecretName
+  host: magento.hevelop.com
 
 ## This will be used to download the source code of your project
 ## The full url will be https://s3-eu-west-1.amazonaws.com/hevelop/magento-pureeros-loc-xxxxxxxxxx.tar.gz
@@ -80,8 +82,6 @@ podAnnotations: {}
 efs:
   enabled: false
   storage: 500Gi
-
-magentoHost: magento.hevelop.com
 
 ##
 ## External database configuration

@@ -13,7 +13,7 @@ metadata:
     heritage: "{{ .Release.Service }}"
 spec:
   rules:
-    - host: "{{ .Value.magentoHost }}"
+    - host: "{{ .Values.global.host }}"
       http:
         paths:
           - path: /*
