@@ -81,7 +81,7 @@ efs:
   enabled: false
   storage: 500Gi
 
-host: magento.hevelop.com
+magentoHost: magento.hevelop.com
 
 ##
 ## External database configuration
