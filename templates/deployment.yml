@@ -78,7 +78,7 @@ spec:
         - mountPath: /efs
           name: efs
       - name: {{ template "magento.fullname" . }}-php-fpm
-        image: {{ template "phpFpm.image" . }}
+        image: {{ template "php-fpm.image" . }}
         imagePullPolicy: {{ .Values.phpFpm.pullPolicy | quote }}
         env:
         - name: URL_ARCHIVE
