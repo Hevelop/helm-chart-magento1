@@ -36,7 +36,7 @@ httpd:
       memory: 128Mi
       cpu: 50m
 
-phpFpm:
+phpfpm:
   registry: hevelop-docker.jfrog.io
   repository: hevelop/php70-m1-prod
   tag: 0.0.1
