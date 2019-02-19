@@ -18,5 +18,5 @@ spec:
         paths:
           - path: /*
             backend:
-              serviceName: {{ template "magento.fullname" . }}
+              serviceName: {{ template "magento.fullname" . }}-httpd
               servicePort: 80  

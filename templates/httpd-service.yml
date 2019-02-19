@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "magento.fullname" . }}
+  name: {{ template "magento.fullname" . }}-httpd
   labels:
     app: {{ template "magento.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"

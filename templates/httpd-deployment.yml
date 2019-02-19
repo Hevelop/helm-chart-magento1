@@ -3,20 +3,20 @@ kind: Deployment
 metadata:
   name: {{ template "magento.fullname" . }}-httpd
   labels:
-    app: {{ template "magento.fullname" . }}-httpd
+    app: {{ template "magento.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
-      app: {{ template "magento.fullname" . }}-httpd
+      app: {{ template "magento.fullname" . }}
       chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
       release: "{{ .Release.Name }}"
   template:
     metadata:
       labels:
-        app: {{ template "magento.fullname" . }}-httpd
+        app: {{ template "magento.fullname" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
       {{- if .Values.podAnnotations }}
@@ -40,8 +40,7 @@ spec:
         - name: FCGI_HOST_AND_PORT
           value: "{{ template "magento.fullname" . }}-service-phpfpm:9000"
         ports:
-        - name: http
-          containerPort: 80
+        - containerPort: 80
         # livenessProbe:
         #   httpGet:
         #     path: /index.php

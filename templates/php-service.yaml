@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ template "magento.fullname" . }}-service-phpfpm
   labels:
-    app: {{ template "magento.fullname" . }}-phpfpm
+    app: {{ template "magento.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
