@@ -7,6 +7,15 @@ stage: staging
 # pullSecrets:
 #   - myRegistrKeySecretName
 
+## This will be used to download the source code of your project
+## The full url will be https://s3-eu-west-1.amazonaws.com/hevelop/magento-pureeros-loc-xxxxxxxxxx.tar.gz
+##
+artifact:
+  url: "https://s3-eu-west-1.amazonaws.com/hevelop"
+  name: magento-pureeros-loc
+  commitHash: xxxxxxxxxx
+  extension: tar.gz
+
 httpd:
   registry: hevelop-docker.jfrog.io
   repository: hevelop/httpd-m1-prod
