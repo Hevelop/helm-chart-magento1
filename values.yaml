@@ -1,12 +1,13 @@
 stage: staging
-
-global:
+nameOverride: hevelop
 ## Optionally specify an array of imagePullSecrets.
 ## Secrets must be manually created in the namespace.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 ##
 # pullSecrets:
 #   - myRegistrKeySecretName
+
+global:
   host: magento.hevelop.com
 
 ## This will be used to download the source code of your project

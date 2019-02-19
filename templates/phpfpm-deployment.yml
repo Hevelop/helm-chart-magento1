@@ -1,0 +1,55 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "magento.fullname" . }}-phpfpm
+  labels:
+    app: {{ template "magento.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "magento.fullname" . }}
+      chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+      release: "{{ .Release.Name }}"
+  template:
+    metadata:
+      labels:
+        app: {{ template "magento.fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+      {{- if .Values.podAnnotations }}
+      annotations:
+{{ toYaml .Values.podAnnotations | indent 8 }}  
+      {{- end }}
+    spec:
+      {{- if .Values.pullSecrets }}
+      imagePullSecrets:
+        {{- range .Values.pullSecrets }}
+        - name: {{ . }}
+        {{- end}}
+      {{- end }}
+      containers:
+      - name: {{ template "magento.fullname" . }}-phpfpm
+        image: {{ template "phpfpm.image" . }}
+        imagePullPolicy: {{ .Values.phpfpm.pullPolicy | quote }}
+        env:
+        - name: URL_ARCHIVE
+          value: "{{ template "artifactFullUrl" . }}"
+        ports:
+        - name: tcp
+          containerPort: 9000
+        {{- if .Values.efs.enabled }}
+        volumeMounts:
+        - mountPath: /efs
+          name: efs
+        {{- end }}
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+      volumes:
+      {{- if .Values.efs.enabled }}
+      - name: efs
+        persistentVolumeClaim:
+          claimName: {{ template "magento.fullname" . }}-efs-pvc
+      {{- end }}

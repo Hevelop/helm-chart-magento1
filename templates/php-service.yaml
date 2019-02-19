@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "magento.fullname" . }}-service-phpfpm
+  labels:
+    app: {{ template "magento.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  selector:
+    app: {{ template "magento.fullname" . }}-phpfpm
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 9000    

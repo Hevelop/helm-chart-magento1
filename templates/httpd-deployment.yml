@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "magento.fullname" . }}
+  name: {{ template "magento.fullname" . }}-httpd
   labels:
     app: {{ template "magento.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
@@ -38,7 +38,7 @@ spec:
         - name: URL_ARCHIVE
           value: "{{ template "artifactFullUrl" . }}"
         - name: FCGI_HOST_AND_PORT
-          value: "{{ template "magento.fullname" . }}-php-fpm:9000"
+          value: "{{ template "magento.fullname" . }}-service-phpfpm:9000"
         ports:
         - name: http
           containerPort: 80
@@ -81,20 +81,6 @@ spec:
         volumeMounts:
         - mountPath: /efs
           name: efs
-      - name: {{ template "magento.fullname" . }}-php-fpm
-        image: {{ template "phpfpm.image" . }}
-        imagePullPolicy: {{ .Values.phpfpm.pullPolicy | quote }}
-        env:
-        - name: URL_ARCHIVE
-          value: "{{ template "artifactFullUrl" . }}"
-        ports:
-        - name: tcp
-          containerPort: 9000
-        {{- if .Values.efs.enabled }}
-        volumeMounts:
-        - mountPath: /efs
-          name: efs
-        {{- end }}
         resources:
 {{ toYaml .Values.resources | indent 10 }}
       volumes:
