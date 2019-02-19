@@ -1,0 +1,101 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "magento.fullname" . }}
+  labels:
+    app: {{ template "magento.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  selector:
+    matchLabels:
+      app: pureeros
+      release: "{{ .Release.Name }}"
+    {{- if .Values.podAnnotations }}
+      annotations:
+{{ toYaml .Values.podAnnotations | indent 8 }}  
+    {{- end }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "magento.fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+    spec:
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecrets | quote }}
+      {{- end }}
+      containers:
+      - name: {{ template "magento.fullname" . }}-httpd
+        image: {{ template "httpd.image" . }}
+        imagePullPolicy: {{ .Values.httpd.pullPolicy | quote }}
+        image: hevelop-docker.jfrog.io/hevelop/httpd-m1-prod:0.0.1
+        env:
+        - name: URL_ARCHIVE
+          value: "{{ template "artifactFullUrl" . }}"
+        ports:
+        - name: http
+          containerPort: 80
+        # livenessProbe:
+        #   httpGet:
+        #     path: /index.php
+        #     port: http
+        # readinessProbe:
+        #   httpGet:
+        #     path: /index.php
+        #     port: http
+        {{- if .Values.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path: /index.php
+            port: http
+            httpHeaders:
+            - name: Host
+              value: {{ .Values.host | quote }}
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: /index.php
+            port: http
+            httpHeaders:
+            - name: Host
+              value: {{ .Values.global.host | quote }}
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+        {{- end }}
+        volumeMounts:
+        - mountPath: /efs
+          name: efs
+      - name: {{ template "magento.fullname" . }}-php-fpm
+        image: {{ template "phpFpm.image" . }}
+        imagePullPolicy: {{ .Values.phpFpm.pullPolicy | quote }}
+        env:
+        - name: URL_ARCHIVE
+          value: "{{ template "artifactFullUrl" . }}"
+        ports:
+        - name: tcp
+          containerPort: 9000
+        {{- if .Values.efs.enabled }}
+        volumeMounts:
+        - mountPath: /efs
+          name: efs
+        {{- end }}
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+      volumes:
+      {{- if .Values.efs.enabled }}
+      - name: efs
+        persistentVolumeClaim:
+          claimName: {{ template "magento.fullname" . }}-efs-pvc
+      {{- end }}
