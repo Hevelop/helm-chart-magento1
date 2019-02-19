@@ -9,10 +9,9 @@ metadata:
     heritage: "{{ .Release.Service }}"
 spec:
   selector:
-    app: {{ template "magento.fullname" . }}
+    app: {{ template "magento.fullname" . }}-httpd
   type: NodePort
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 80
-    name: http    
+  - name: http
+    protocol: TCP
+    port: 80 
