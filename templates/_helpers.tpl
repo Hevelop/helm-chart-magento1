@@ -42,7 +42,7 @@ Return the proper Magento php-fpm image name
 */}}
 {{- define "phpfpm.image" -}}
 {{- $registryName := .Values.phpfpm.registry -}}
-{{- $repositoryName := .Values.phpFpm.repository -}}
-{{- $tag := .Values.phpFpm.tag | toString -}}
+{{- $repositoryName := .Values.phpfpm.repository -}}
+{{- $tag := .Values.phpfpm.tag | toString -}}
 {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
