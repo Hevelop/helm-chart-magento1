@@ -24,9 +24,11 @@ spec:
 {{ toYaml .Values.podAnnotations | indent 8 }}  
       {{- end }}
     spec:
-      {{- if .Values.imagePullSecrets }}
+      {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
-      - name: {{ .Values.imagePullSecrets | quote }}
+        {{- range .Values.image.pullSecrets }}
+        - name: {{ . }}
+        {{- end}}
       {{- end }}
       containers:
       - name: {{ template "magento.fullname" . }}-httpd
