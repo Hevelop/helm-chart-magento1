@@ -38,6 +38,8 @@ spec:
         env:
         - name: URL_ARCHIVE
           value: "{{ template "artifactFullUrl" . }}"
+        - name: FCGI_HOST_AND_PORT
+          value: "{{ template "magento.fullname" . }}-php-fpm:9000"
         ports:
         - name: http
           containerPort: 80
