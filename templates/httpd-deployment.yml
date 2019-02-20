@@ -38,17 +38,9 @@ spec:
         - name: URL_ARCHIVE
           value: "{{ template "artifactFullUrl" . }}"
         - name: FCGI_HOST_AND_PORT
-          value: "{{ template "magento.fullname" . }}-service-phpfpm:9000"
+          value: "{{ template "magento.fullname" . }}-phpfpm:9000"
         ports:
         - containerPort: 80
-        # livenessProbe:
-        #   httpGet:
-        #     path: /index.php
-        #     port: http
-        # readinessProbe:
-        #   httpGet:
-        #     path: /index.php
-        #     port: http
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
