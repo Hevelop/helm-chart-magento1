@@ -39,11 +39,7 @@ spec:
           value: "{{ template "artifactFullUrl" . }}"
         ports:
         - containerPort: 9000
-        {{- if .Values.efs.enabled }}
         volumeMounts:
-        - mountPath: /efs
-          name: efs
-        {{- end }}
         resources:
 {{ toYaml .Values.resources | indent 10 }}
       volumes:

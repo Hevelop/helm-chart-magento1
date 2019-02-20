@@ -70,8 +70,15 @@ spec:
           failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
         {{- end }}
         volumeMounts:
+        {{- if || .Values.efs.enabled .Values.efs.existingPvcName }}
         - mountPath: /efs
           name: efs
+        {{- range $index, $val := .Values.efs.containerMountPaths }}
+        - mountPath: "/var/www/deploy{{ $val }}"
+          subPath: {{ (trimPrefix "/" $val) }}
+          name: efs
+        {{- end }}
+        {{- end }}
         resources:
 {{ toYaml .Values.resources | indent 10 }}
       volumes:
@@ -79,4 +86,9 @@ spec:
       - name: efs
         persistentVolumeClaim:
           claimName: {{ template "magento.fullname" . }}-efs-pvc
+      {{- end }}
+      {{- if && .Values.efs.existingPvcName (not .Values.efs.enabled) }}
+      - name: efs
+        persistentVolumeClaim:
+          claimName: {{ .Values.efs.existingPvcName }}
       {{- end }}
