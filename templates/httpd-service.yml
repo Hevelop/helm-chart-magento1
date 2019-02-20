@@ -10,6 +10,8 @@ metadata:
 spec:
   selector:
     app: {{ template "magento.fullname" . }}-httpd
+  type: NodePort
   ports:
-  - protocol: TCP
+  - name: http
+    protocol: TCP
     port: 80 
