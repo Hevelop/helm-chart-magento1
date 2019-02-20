@@ -83,6 +83,11 @@ podAnnotations: {}
 efs:
   enabled: false
   storage: 500Gi
+  # existingPvcName: "my-persisten-volume-claim"
+  containerMountPaths: {}
+    # - /htdocs/var
+    # - /htdocs/media
+    # - /htdocs/sitemaps
 
 ##
 ## External database configuration
@@ -146,7 +151,7 @@ mariadb:
       ##
       # storageClass: "-"
       accessMode: ReadWriteOnce
-      size: 8Gi
+      size: 8Gi      
 
 loadBalancer:
   annotations:
