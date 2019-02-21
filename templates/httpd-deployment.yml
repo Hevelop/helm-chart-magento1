@@ -16,8 +16,6 @@ spec:
   selector:
     matchLabels:
       app: {{ template "magento.fullname" . }}-httpd
-      chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-      release: "{{ .Release.Name }}"
   template:
     metadata:
       labels:
