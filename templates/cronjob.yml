@@ -35,8 +35,12 @@ spec:
               - name: URL_ARCHIVE
                 value: "{{ template "artifactFullUrl" . }}"
               args:
-                - "bash"
-                - {{ .Values.cron.command }}
+                - "su"
+                - "-c"
+                - {{ .Values.cron.command | quote }}
+                - "-s"
+                - "/bin/sh"
+                - "www-data"
               volumeMounts:
               {{- if or .Values.efs.enabled .Values.efs.existingPvcName }}
                 - mountPath: /efs
