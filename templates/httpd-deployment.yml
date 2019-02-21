@@ -83,7 +83,7 @@ spec:
         {{- end }}
         {{- end }}
         resources:
-{{ toYaml .Values.resources | indent 10 }}
+{{ toYaml .Values.httpd.resources | indent 10 }}
       volumes:
       {{- if .Values.efs.enabled }}
       - name: efs

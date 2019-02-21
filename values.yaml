@@ -35,8 +35,11 @@ httpd:
   ##
   resources:
     requests:
-      memory: 128Mi
-      cpu: 50m
+      memory: 256Mi
+      cpu: 300m
+    limits:
+      memory: 256Mi
+      cpu: 300m
 
 phpfpm:
   replicaCount: 1
@@ -61,7 +64,10 @@ phpfpm:
   resources:
     requests:
       memory: 512Mi
-      cpu: 200m
+      cpu: 500m
+    limits:
+      memory: 512Mi
+      cpu: 500m
 
 cron:
   enabled: false
@@ -74,6 +80,13 @@ cron:
   ##
   pullPolicy: IfNotPresent
   command: "/var/www/deploy/htdocs/scheduler_cron.sh"
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 500m
+    limits:
+      memory: 512Mi
+      cpu: 500m
 
 ## Configure liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)

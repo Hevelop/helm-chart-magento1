@@ -51,6 +51,8 @@ spec:
                   name: efs
                 {{- end }}
               {{- end }}
+              resources:
+{{ toYaml .Values.cron.resources | indent 16 }}
           volumes:
           {{- if .Values.efs.enabled }}
           - name: efs
