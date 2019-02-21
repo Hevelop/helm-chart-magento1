@@ -1,0 +1,62 @@
+{{- if .Values.cron.enabled }}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ template "magento.fullname" . }}-cron
+  labels:
+    app: {{ template "magento.fullname" . }}-cron
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  schedule: "*/1 * * * *"
+  concurrencyPolicy: "Forbid"
+  failedJobsHistoryLimit: 10
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: {{ template "magento.fullname" . }}-cron
+            chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+            release: "{{ .Release.Name }}"
+        spec:
+          {{- if .Values.pullSecrets }}
+          imagePullSecrets:
+            {{- range .Values.pullSecrets }}
+            - name: {{ . }}
+            {{- end}}
+          {{- end }}
+          containers:
+            - name: {{ template "magento.fullname" . }}-cronjob
+              image: {{ template "cron.image" . }}
+              imagePullPolicy: {{ .Values.cron.pullPolicy | quote }}
+              env:
+              - name: URL_ARCHIVE
+                value: "{{ template "artifactFullUrl" . }}"
+              args:
+                - "bash"
+                - {{ .Values.cron.command }}
+              volumeMounts:
+              {{- if or .Values.efs.enabled .Values.efs.existingPvcName }}
+                - mountPath: /efs
+                  name: efs
+                {{- range $index, $val := .Values.efs.containerMountPaths }}
+                - mountPath: "/var/www/deploy{{ $val }}"
+                  subPath: {{ (trimPrefix "/" $val) }}
+                  name: efs
+                {{- end }}
+              {{- end }}
+          volumes:
+          {{- if .Values.efs.enabled }}
+          - name: efs
+            persistentVolumeClaim:
+              claimName: {{ template "magento.fullname" . }}-efs-pvc
+          {{- end }}
+          {{- if and .Values.efs.existingPvcName (not .Values.efs.enabled) }}
+          - name: efs
+            persistentVolumeClaim:
+              claimName: {{ .Values.efs.existingPvcName }}
+          {{- end }}
+          restartPolicy: OnFailure
+{{- end }}

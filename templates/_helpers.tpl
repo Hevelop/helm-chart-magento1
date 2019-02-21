@@ -46,3 +46,13 @@ Return the proper Magento php-fpm image name
 {{- $tag := .Values.phpfpm.tag | toString -}}
 {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
+
+{{/*
+Return the proper Magento cron image name
+*/}}
+{{- define "cron.image" -}}
+{{- $registryName := .Values.cron.registry -}}
+{{- $repositoryName := .Values.cron.repository -}}
+{{- $tag := .Values.cron.tag | toString -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
