@@ -42,6 +42,26 @@ spec:
         env:
         - name: URL_ARCHIVE
           value: "{{ template "artifactFullUrl" . }}"
+        {{- if .Values.phpfpm.processManager }}
+        - name: PROCESS_MANAGER
+          value: "{{ .Values.phpfpm.processManager }}"
+        {{- end }}
+        {{- if .Values.phpfpm.pmMaxChildren }}
+        - name: PM_MAX_CHILDREN
+          value: "{{ .Values.phpfpm.pmMaxChildren }}"
+        {{- end }}
+        {{- if .Values.phpfpm.PmProcessIdleTimeout }}
+        - name: PM_PROCESS_IDLE_TIMEOUT
+          value: "{{ .Values.phpfpm.PmProcessIdleTimeout }}"
+        {{- end }}
+        {{- if .Values.phpfpm.PmMaxRequests }}
+        - name: PM_MAX_REQUESTS
+          value: "{{ .Values.phpfpm.PmMaxRequests }}"
+        {{- end }}
+        {{- if .Values.phpfpm.RequestTerminateTimeout }}
+        - name: REQUEST_TERMINATE_TIMEOUT
+          value: "{{ .Values.phpfpm.RequestTerminateTimeout }}"
+        {{- end }}
         ports:
         - containerPort: 9000
         volumeMounts:
