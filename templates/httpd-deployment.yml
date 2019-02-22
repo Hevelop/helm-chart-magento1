@@ -57,11 +57,11 @@ spec:
         {{- if .Values.httpd.readinessProbe.enabled }}
         readinessProbe:
           httpGet:
-            path: /index.php
-            port: 80
-            # httpHeaders:
-            # - name: Host
-            #   value: {{ .Values.global.host | quote }}
+            path: {{ .Values.httpd.readinessProbe.path }}
+            port: {{ .Values.httpd.readinessProbe.port }}
+            httpHeaders:
+            - name: Host
+              value: {{ .Values.global.host | quote }}
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}

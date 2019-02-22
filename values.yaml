@@ -44,6 +44,8 @@ httpd:
     enabled: true
   readinessProbe:
     enabled: true
+    path: /favicon.ico
+    port: 80
 
 phpfpm:
   replicaCount: 1
