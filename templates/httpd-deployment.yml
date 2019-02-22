@@ -47,11 +47,8 @@ spec:
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
-            path: /index.php
-            port: http
-            httpHeaders:
-            - name: Host
-              value: {{ .Values.host | quote }}
+            tcpSocket:
+              port: 80
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
