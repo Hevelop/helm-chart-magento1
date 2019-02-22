@@ -56,3 +56,13 @@ Return the proper Magento cron image name
 {{- $tag := .Values.cron.tag | toString -}}
 {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
+
+{{/*
+Return the proper Magento prehook image name
+*/}}
+{{- define "prehook.image" -}}
+{{- $registryName := .Values.prehook.registry -}}
+{{- $repositoryName := .Values.prehook.repository -}}
+{{- $tag := .Values.prehook.tag | toString -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}

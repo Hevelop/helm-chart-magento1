@@ -1,0 +1,51 @@
+{{- if .Values.prehook.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "magento.fullname" . }}-pre-hook
+  labels:
+    app: {{ template "magento.fullname" . }}-pre-hook
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    # Reference: https://github.com/helm/helm/blob/master/docs/charts_hooks.md
+    "helm.sh/hook": pre-upgrade,pre-install
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      name: {{ template "magento.fullname" . }}-pre-hook
+      labels:
+        app: {{ template "magento.fullname" . }}-pre-hook
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+    spec:
+      restartPolicy: Never
+      {{- if .Values.pullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.pullSecrets }}
+      - name: {{ . }}
+      {{- end }}
+      {{- end }}
+      containers:
+        - name: {{ template "magento.fullname" . }}-pre-operation
+          image: {{ template "prehook.image" . }}
+          imagePullPolicy: {{ .Values.prehook.pullPolicy | quote }}
+          env:
+          - name: URL_ARCHIVE
+            value: "{{ template "artifactFullUrl" . }}"
+          - name: STAGE
+            value: {{ .Values.stage }}
+          args:
+          - "su"
+          - "-c"
+          - {{ .Values.prehook.command | quote }}
+          - "-s"
+          - "/bin/sh"
+          - "www-data"
+{{- end }}

@@ -98,6 +98,18 @@ cron:
       memory: 512Mi
       cpu: 500m
 
+prehook:
+  enabled: false
+  registry: hevelop-docker.jfrog.io
+  repository: hevelop/php70-cli-m1-prod
+  tag: 0.0.1
+  command: "build/pre-hook.sh"
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+
 ## Configure liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 ##
