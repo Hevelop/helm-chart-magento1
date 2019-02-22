@@ -103,7 +103,7 @@ prehook:
   registry: hevelop-docker.jfrog.io
   repository: hevelop/php70-cli-m1-prod
   tag: 0.0.1
-  command: "build/pre-hook.sh"
+  command: "sh build/pre-hook.sh"
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
