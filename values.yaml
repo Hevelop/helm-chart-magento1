@@ -40,6 +40,10 @@ httpd:
     limits:
       memory: 256Mi
       cpu: 300m
+  livenessProbe:
+    enabled: true
+  readinessProbe:
+    enabled: true
 
 phpfpm:
   replicaCount: 1
@@ -68,6 +72,8 @@ phpfpm:
     limits:
       memory: 512Mi
       cpu: 500m
+  livenessProbe:
+    enabled: true
 
 cron:
   enabled: false
@@ -92,14 +98,12 @@ cron:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 ##
 livenessProbe:
-  enabled: true
   initialDelaySeconds: 1000
   periodSeconds: 10
   timeoutSeconds: 5
   successThreshold: 1
   failureThreshold: 6
 readinessProbe:
-  enabled: true
   initialDelaySeconds: 30
   periodSeconds: 5
   timeoutSeconds: 3

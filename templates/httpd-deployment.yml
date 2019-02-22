@@ -44,18 +44,17 @@ spec:
           value: "{{ template "magento.fullname" . }}-phpfpm:9000"
         ports:
         - containerPort: 80
-        {{- if .Values.livenessProbe.enabled }}
+        {{- if .Values.httpd.livenessProbe.enabled }}
         livenessProbe:
-          httpGet:
-            tcpSocket:
-              port: 80
+          tcpSocket:
+            port: 80
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
           successThreshold: {{ .Values.livenessProbe.successThreshold }}
           failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
         {{- end }}
-        {{- if .Values.readinessProbe.enabled }}
+        {{- if .Values.httpd.readinessProbe.enabled }}
         readinessProbe:
           httpGet:
             path: /index.php
