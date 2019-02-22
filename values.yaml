@@ -74,6 +74,8 @@ phpfpm:
       cpu: 500m
   livenessProbe:
     enabled: true
+  readinessProbe:
+    enabled: true
 
 cron:
   enabled: false
