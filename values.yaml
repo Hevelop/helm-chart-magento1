@@ -46,6 +46,9 @@ httpd:
     enabled: true
     path: /favicon.ico
     port: 80
+  rollingUpdate:
+    maxUnavailable: 25%
+    maxSurge: 25%
 
 phpfpm:
   replicaCount: 1
@@ -78,6 +81,9 @@ phpfpm:
     enabled: true
   readinessProbe:
     enabled: true
+  rollingUpdate:
+    maxUnavailable: 25%
+    maxSurge: 25%
 
 cron:
   enabled: false

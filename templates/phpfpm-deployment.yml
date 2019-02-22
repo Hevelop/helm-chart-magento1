@@ -13,6 +13,11 @@ metadata:
     heritage: "{{ .Release.Service }}"
 spec:
   replicas: {{ .Values.phpfpm.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: {{ .Values.phpfpm.rollingUpdate.maxUnavailable }}
+      maxSurge: {{ .Values.phpfpm.rollingUpdate.maxSurge }}
   selector:
     matchLabels:
       app: {{ template "magento.fullname" . }}-phpfpm

@@ -13,6 +13,11 @@ metadata:
     heritage: "{{ .Release.Service }}"
 spec:
   replicas: {{ .Values.httpd.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: {{ .Values.httpd.rollingUpdate.maxUnavailable }}
+      maxSurge: {{ .Values.httpd.rollingUpdate.maxSurge }}
   selector:
     matchLabels:
       app: {{ template "magento.fullname" . }}-httpd
