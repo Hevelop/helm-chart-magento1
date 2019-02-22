@@ -58,7 +58,7 @@ spec:
         readinessProbe:
           httpGet:
             path: /index.php
-            port: http
+            port: 80
             httpHeaders:
             - name: Host
               value: {{ .Values.global.host | quote }}
