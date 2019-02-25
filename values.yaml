@@ -120,13 +120,13 @@ prehook:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 ##
 livenessProbe:
-  initialDelaySeconds: 1000
+  initialDelaySeconds: 300
   periodSeconds: 10
   timeoutSeconds: 5
   successThreshold: 1
   failureThreshold: 6
 readinessProbe:
-  initialDelaySeconds: 30
+  initialDelaySeconds: 10
   periodSeconds: 5
   timeoutSeconds: 3
   successThreshold: 1
