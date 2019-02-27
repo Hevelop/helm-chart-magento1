@@ -100,4 +100,4 @@ spec:
         persistentVolumeClaim:
           claimName: {{ .Values.efs.existingPvcName }}
       {{- end }}
-      terminationGracePeriod: {{ .Values.httpd.terminationGracePeriod | quote }}
+      terminationGracePeriodSeconds: {{ .Values.httpd.terminationGracePeriodSeconds | quote }}

@@ -49,7 +49,7 @@ httpd:
   rollingUpdate:
     maxUnavailable: 25%
     maxSurge: 25%
-  terminationGracePeriod: 60
+  terminationGracePeriodSeconds: 60
   lifecycle:
     command:
       - "/bin/sh"
@@ -90,7 +90,7 @@ phpfpm:
   rollingUpdate:
     maxUnavailable: 25%
     maxSurge: 25%
-  terminationGracePeriod: 60
+  terminationGracePeriodSeconds: 60
   lifecycle:
     command:
       - "/bin/sh"
