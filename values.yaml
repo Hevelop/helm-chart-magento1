@@ -10,15 +10,6 @@ nameOverride: hevelop
 global:
   host: magento.hevelop.com
 
-## This will be used to download the source code of your project
-## The full url will be https://s3-eu-west-1.amazonaws.com/hevelop/magento-pureeros-loc-xxxxxxxxxx.tar.gz
-##
-artifact:
-  url: "https://s3-eu-west-1.amazonaws.com/hevelop"
-  name: magento-pureeros-loc
-  commitHash: xxxxxxxxxx
-  extension: tar.gz
-
 httpd:
   replicaCount: 1
   registry: hevelop-docker.jfrog.io
@@ -51,10 +42,10 @@ httpd:
     maxSurge: 25%
   terminationGracePeriodSeconds: 60
   lifecycle:
-    command:
+    preStopCommand:
       - "/bin/sh"
       - "-c"
-      - "kill -28 1"
+      - "httpd -k graceful-stop"
 
 phpfpm:
   replicaCount: 1
@@ -92,10 +83,10 @@ phpfpm:
     maxSurge: 25%
   terminationGracePeriodSeconds: 60
   lifecycle:
-    command:
+    preStopCommand:
       - "/bin/sh"
       - "-c"
-      - "kill -3 1"
+      - "kill -3 1;while kill -0 1;do sleep 1;done;"
 
 cron:
   enabled: false

@@ -45,7 +45,7 @@ spec:
         lifecycle:
           preStop:
             exec:
-              command: {{ .Values.httpd.lifecycle.command }}
+              command: {{ .Values.httpd.lifecycle.preStopCommand }}
         env:
         - name: URL_ARCHIVE
           value: "{{ template "artifactFullUrl" . }}"

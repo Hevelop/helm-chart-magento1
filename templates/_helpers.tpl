@@ -16,18 +16,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
-{{- define "artifactFullUrl" -}}
-{{- $url := .Values.artifact.url -}}
-{{- $name := .Values.artifact.name -}}
-{{- $commitHash := .Values.artifact.commitHash -}}
-{{- $extension := .Values.artifact.extension -}}
-{{- printf "%s/%s-%s.%s" $url $name $commitHash $extension -}}
-{{- end -}}
-
-{{/*
 Return the proper Magento httpd image name
 */}}
 {{- define "httpd.image" -}}
