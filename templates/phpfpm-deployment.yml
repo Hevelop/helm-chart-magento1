@@ -42,6 +42,10 @@ spec:
       - name: {{ template "magento.fullname" . }}-phpfpm
         image: {{ template "phpfpm.image" . }}
         imagePullPolicy: {{ .Values.phpfpm.pullPolicy | quote }}
+        lifecycle:
+          preStop:
+            exec:
+              command: {{ .Values.phpfpm.lifecycle.command }}
         env:
         - name: URL_ARCHIVE
           value: "{{ template "artifactFullUrl" . }}"
@@ -110,3 +114,4 @@ spec:
         persistentVolumeClaim:
           claimName: {{ .Values.efs.existingPvcName }}
       {{- end }}
+      terminationGracePeriod: {{ .Values.phpfpm.terminationGracePeriod | quote }}

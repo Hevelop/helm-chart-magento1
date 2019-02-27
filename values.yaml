@@ -90,6 +90,12 @@ phpfpm:
   rollingUpdate:
     maxUnavailable: 25%
     maxSurge: 25%
+  terminationGracePeriod: 60
+  lifecycle:
+    command:
+      - "/bin/sh"
+      - "-c"
+      - "kill -3 1"
 
 cron:
   enabled: false
