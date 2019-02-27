@@ -37,11 +37,15 @@ spec:
         {{- range .Values.pullSecrets }}
         - name: {{ . }}
         {{- end}}
-      {{- end }}
+      {{- end }}      
       containers:
       - name: {{ template "magento.fullname" . }}-httpd
         image: {{ template "httpd.image" . }}
         imagePullPolicy: {{ .Values.httpd.pullPolicy | quote }}
+        lifecycle:
+          preStop:
+            exec:
+              command: {{ .Values.httpd.lifecycle.command }}
         env:
         - name: URL_ARCHIVE
           value: "{{ template "artifactFullUrl" . }}"
@@ -96,3 +100,4 @@ spec:
         persistentVolumeClaim:
           claimName: {{ .Values.efs.existingPvcName }}
       {{- end }}
+      terminationGracePeriod: {{ .Values.httpd.terminationGracePeriod | quote }}

@@ -49,6 +49,12 @@ httpd:
   rollingUpdate:
     maxUnavailable: 25%
     maxSurge: 25%
+  terminationGracePeriod: 60
+  lifecycle:
+    command:
+      - "/bin/sh"
+      - "-c"
+      - "kill -28 1"
 
 phpfpm:
   replicaCount: 1
