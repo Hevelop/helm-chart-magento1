@@ -43,9 +43,9 @@ httpd:
   terminationGracePeriodSeconds: 60
   lifecycle:
     preStopCommand:
-      - "/bin/sh"
-      - "-c"
-      - "httpd -k graceful-stop"
+      - "httpd"
+      - "-k"
+      - "graceful-stop"
 
 phpfpm:
   replicaCount: 1
@@ -84,9 +84,9 @@ phpfpm:
   terminationGracePeriodSeconds: 60
   lifecycle:
     preStopCommand:
-      - "/bin/sh"
-      - "-c"
-      - "kill -3 1;while kill -0 1;do sleep 1;done;"
+      - |-
+        kill -3 1
+        while kill -0 1;do sleep 1;done;
 
 cron:
   enabled: false
