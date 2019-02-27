@@ -37,8 +37,6 @@ spec:
           image: {{ template "prehook.image" . }}
           imagePullPolicy: {{ .Values.prehook.pullPolicy | quote }}
           env:
-          - name: URL_ARCHIVE
-            value: "{{ template "artifactFullUrl" . }}"
           - name: STAGE
             value: {{ .Values.stage }}
           args:

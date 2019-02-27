@@ -31,9 +31,6 @@ spec:
             - name: {{ template "magento.fullname" . }}-cronjob
               image: {{ template "cron.image" . }}
               imagePullPolicy: {{ .Values.cron.pullPolicy | quote }}
-              env:
-              - name: URL_ARCHIVE
-                value: "{{ template "artifactFullUrl" . }}"
               args:
                 - "su"
                 - "-c"

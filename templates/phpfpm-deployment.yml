@@ -47,8 +47,6 @@ spec:
             exec:
               command: {{ .Values.phpfpm.lifecycle.preStopCommand }}
         env:
-        - name: URL_ARCHIVE
-          value: "{{ template "artifactFullUrl" . }}"
         {{- if .Values.phpfpm.processManager }}
         - name: PROCESS_MANAGER
           value: "{{ .Values.phpfpm.processManager }}"

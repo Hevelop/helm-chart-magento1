@@ -47,8 +47,6 @@ spec:
             exec:
               command: {{ .Values.httpd.lifecycle.preStopCommand }}
         env:
-        - name: URL_ARCHIVE
-          value: "{{ template "artifactFullUrl" . }}"
         - name: FCGI_HOST_AND_PORT
           value: "{{ template "magento.fullname" . }}-phpfpm:9000"
         ports:
