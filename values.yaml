@@ -9,7 +9,7 @@ nameOverride: hevelop
 
 global:
   host: magento.hevelop.com
-  secondaryHost: www.magento.hevelop.com
+  # secondaryHost: www.magento.hevelop.com
 
 httpd:
   replicaCount: 1

@@ -20,6 +20,7 @@ spec:
             backend:
               serviceName: {{ template "magento.fullname" . }}-httpd
               servicePort: 80
+    {{- if .Values.global.secondaryHost }}
     - host: "{{ .Values.global.secondaryHost }}"
       http:
         paths:
@@ -27,3 +28,4 @@ spec:
             backend:
               serviceName: {{ template "magento.fullname" . }}-httpd
               servicePort: 80
+    {{- end }}
