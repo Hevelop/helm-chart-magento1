@@ -1,5 +1,5 @@
 name: magento1
-version: 5.1.7
+version: 6.0.0
 description: Hevelop helm chart for mangento1.
 keywords:
 - magento
@@ -9,7 +9,7 @@ keywords:
 - php
 home: https://magento.com/
 sources:
-- https://github.com/bitnami/bitnami-docker-magento
+- https://github.com/Hevelop/helm-chart-magento1
 maintainers:
 - name: Hevelop
   email: systems@hevelop.com

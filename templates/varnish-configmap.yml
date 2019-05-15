@@ -1,0 +1,13 @@
+{{- if .Values.varnish.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "magento.fullname" . }}-varnish-configmap
+  labels:
+    app: {{ template "magento.fullname" . }}-varnish
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  {{- (tpl (.Files.Glob "config/varnish/*").AsConfig . ) | nindent 2 }}
+{{- end }}

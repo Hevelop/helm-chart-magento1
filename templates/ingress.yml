@@ -18,7 +18,7 @@ spec:
         paths:
           - path: /*
             backend:
-              serviceName: {{ template "magento.fullname" . }}-httpd
+              serviceName: {{ template "magento.fullname" . }}{{- if .Values.varnish.enabled }}-varnish{{- else }}-httpd{{- end }}
               servicePort: 80
     {{- if .Values.global.secondaryHost }}
     - host: "{{ .Values.global.secondaryHost }}"
@@ -26,6 +26,6 @@ spec:
         paths:
           - path: /*
             backend:
-              serviceName: {{ template "magento.fullname" . }}-httpd
+              serviceName: {{ template "magento.fullname" . }}{{- if .Values.varnish.enabled }}-varnish{{- else }}-httpd{{- end }}
               servicePort: 80
     {{- end }}

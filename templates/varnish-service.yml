@@ -1,0 +1,19 @@
+{{- if .Values.varnish.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "magento.fullname" . }}-varnish
+  labels:
+    app: {{ template "magento.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  selector:
+    app: {{ template "magento.fullname" . }}-varnish
+  type: NodePort
+  ports:
+  - name: varnish
+    protocol: TCP
+    port: 80
+{{- end }}

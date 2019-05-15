@@ -1,0 +1,86 @@
+{{- if .Values.varnish.enabled }}
+{{- if .Capabilities.APIVersions.Has "apps/v1" }}
+apiVersion: apps/v1
+{{- else }}
+apiVersion: apps/v1beta1
+{{- end }}
+kind: Deployment
+metadata:
+  name: {{ template "magento.fullname" . }}-varnish
+  labels:
+    app: {{ template "magento.fullname" . }}-varnish
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.varnish.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: {{ .Values.varnish.rollingUpdate.maxUnavailable }}
+      maxSurge: {{ .Values.varnish.rollingUpdate.maxSurge }}
+  selector:
+    matchLabels:
+      app: {{ template "magento.fullname" . }}-varnish
+  template:
+    metadata:
+      labels:
+        app: {{ template "magento.fullname" . }}-varnish
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+      {{- if .Values.podAnnotations }}
+      annotations:
+{{ toYaml .Values.podAnnotations | indent 8 }}  
+      {{- end }}
+    spec:
+      {{- if .Values.pullSecrets }}
+      imagePullSecrets:
+        {{- range .Values.pullSecrets }}
+        - name: {{ . }}
+        {{- end}}
+      {{- end }}      
+      containers:
+      - name: {{ template "magento.fullname" . }}-varnish
+        image: {{ template "varnish.image" . }}
+        imagePullPolicy: {{ .Values.varnish.pullPolicy | quote }}
+        lifecycle:
+          preStop:
+            exec:
+              command: {{ .Values.varnish.lifecycle.preStopCommand }}
+        ports:
+        - containerPort: 80
+        {{- if .Values.varnish.livenessProbe.enabled }}
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.varnish.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.varnish.readinessProbe.path }}
+            port: {{ .Values.varnish.readinessProbe.port }}
+            httpHeaders:
+            - name: Host
+              value: {{ .Values.global.host | quote }}
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+        {{- end }}
+        volumeMounts:
+        - name: varnish-config
+          mountPath: /etc/varnish
+        resources:
+{{ toYaml .Values.varnish.resources | indent 10 }}
+      volumes:
+      - name: varnish-config
+        configMap:
+          name: {{ template "magento.fullname" . }}-varnish-configmap
+      # terminationGracePeriodSeconds: {{ .Values.varnish.terminationGracePeriodSeconds | quote }}
+{{- end }}

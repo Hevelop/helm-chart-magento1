@@ -88,6 +88,42 @@ phpfpm:
       - |-
         kill -3 1
         while kill -0 1;do sleep 1;done;
+varnish:
+  enabled: 0
+  replicaCount: 1
+  registry: hevelop-docker.jfrog.io
+  repository: hevelop/varnish
+  tag: 4.1-stretch
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent  
+  ##
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 300m
+    limits:
+      memory: 256Mi
+      cpu: 300m
+  livenessProbe:
+    enabled: true
+  readinessProbe:
+    enabled: true
+    path: /favicon.ico
+    port: 80
+  rollingUpdate:
+    maxUnavailable: 25%
+    maxSurge: 25%
+  terminationGracePeriodSeconds: 60
+  lifecycle:
+    preStopCommand:
+      - "sh"
+      - "/graceful-shutdown.sh"
 
 cron:
   enabled: false

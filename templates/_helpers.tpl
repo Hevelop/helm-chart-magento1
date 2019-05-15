@@ -36,6 +36,16 @@ Return the proper Magento php-fpm image name
 {{- end -}}
 
 {{/*
+Return the proper Magento varnish image name
+*/}}
+{{- define "varnish.image" -}}
+{{- $registryName := .Values.varnish.registry -}}
+{{- $repositoryName := .Values.varnish.repository -}}
+{{- $tag := .Values.varnish.tag | toString -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+
+{{/*
 Return the proper Magento cron image name
 */}}
 {{- define "cron.image" -}}
