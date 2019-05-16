@@ -184,7 +184,7 @@ efs:
   enabled: false
   storage: 500Gi
   # existingPvcName: "my-persisten-volume-claim"
-  containerMountPaths: {}
+  containerMountPaths: []
     # - /htdocs/var
     # - /htdocs/media
     # - /htdocs/sitemaps
