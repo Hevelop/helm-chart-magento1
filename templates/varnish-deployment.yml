@@ -75,7 +75,14 @@ spec:
         {{- end }}
         volumeMounts:
         - name: varnish-config
-          mountPath: /etc/varnish
+          mountPath: /etc/varnish/default.vcl
+          subPath: default.vcl
+        - name: varnish-config
+          mountPath: /etc/varnish/backend.vcl
+          subPath: backend.vcl
+        - name: varnish-config
+          mountPath: /etc/varnish/acl.vcl
+          subPath: acl.vcl
         resources:
 {{ toYaml .Values.varnish.resources | indent 10 }}
       volumes:
