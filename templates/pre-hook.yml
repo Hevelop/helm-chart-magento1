@@ -12,7 +12,7 @@ metadata:
     # This is what defines this resource as a hook. Without this line, the
     # job is considered part of the release.
     # Reference: https://github.com/helm/helm/blob/master/docs/charts_hooks.md
-    "helm.sh/hook": pre-upgrade,pre-install
+    "helm.sh/hook": pre-upgrade,post-install
     "helm.sh/hook-weight": "-5"
     "helm.sh/hook-delete-policy": hook-succeeded
 spec:
