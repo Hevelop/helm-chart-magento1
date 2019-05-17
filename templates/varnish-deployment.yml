@@ -44,7 +44,7 @@ spec:
         image: jwilder/dockerize        
         args: 
         - '-wait'
-        - "http://{{ template "magento.fullname" . }}-httpd:80"
+        - "tcp://{{ template "magento.fullname" . }}-httpd:80"
         - '-timeout'
         - '180s'
       containers:
