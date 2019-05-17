@@ -77,7 +77,7 @@ spec:
         {{- end }}
         volumeMounts:
         - name: varnish-config
-          mountPath: /usr/local/var/varnish
+          mountPath: /usr/local/etc/varnish
         resources:
 {{ toYaml .Values.varnish.resources | indent 10 }}
       volumes:
