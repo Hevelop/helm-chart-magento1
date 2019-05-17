@@ -49,8 +49,6 @@ spec:
               command: {{ .Values.varnish.lifecycle.preStopCommand }}
         ports:
         - containerPort: 80
-        securityContext:
-          runAsUser: 100
         {{- if .Values.varnish.livenessProbe.enabled }}
         livenessProbe:
           tcpSocket:
