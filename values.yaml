@@ -60,11 +60,12 @@ phpfpm:
   pullPolicy: IfNotPresent
   ## Specify setting for php fpm
   ##
-  # processManager: dynamic
-  # pmMaxChildren: 5
-  # PmProcessIdleTimeout: 0
-  # PmMaxRequests: 500
-  # RequestTerminateTimeout: 0
+  configVersion: "7.0"
+  processManager: static
+  pmMaxChildren: 5
+  PmProcessIdleTimeout: 0
+  PmMaxRequests: 500
+  RequestTerminateTimeout: 0
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##

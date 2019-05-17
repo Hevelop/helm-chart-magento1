@@ -1,3 +1,4 @@
 # Changelog
 
-- 5.1.7 Added Varnish support
+- 6.1.0 Added configmap for phpfpm
+- 5.1.7 Added Varnish support and configmap for httpd

@@ -37,7 +37,15 @@ spec:
         {{- range .Values.pullSecrets }}
         - name: {{ . }}
         {{- end}}
-      {{- end }}      
+      {{- end }}
+      initContainers:
+      - name: wait-php-fpm
+        image: jwilder/dockerize        
+        args: 
+        - '-wait'
+        - "tcp://{{ template "magento.fullname" . }}-phpfpm:9000"
+        - '-timeout'
+        - '180s'
       containers:
       - name: {{ template "magento.fullname" . }}-httpd
         image: {{ template "httpd.image" . }}
@@ -46,9 +54,6 @@ spec:
           preStop:
             exec:
               command: {{ .Values.httpd.lifecycle.preStopCommand }}
-        env:
-        - name: FCGI_HOST_AND_PORT
-          value: "{{ template "magento.fullname" . }}-phpfpm:9000"
         ports:
         - containerPort: 80
         {{- if .Values.httpd.livenessProbe.enabled }}

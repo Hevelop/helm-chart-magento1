@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "magento.fullname" . }}-phpfpm-configmap
+  labels:
+    app: {{ template "magento.fullname" . }}-phpfpm
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    config: {{ printf "%s%s%s" "config/php/" .Values.phpfpm.configVersion "/fpm/*" }}
+data:
+    {{- (tpl (.Files.Glob (printf "%s%s%s" "config/php/" .Values.phpfpm.configVersion "/fpm/*" )).AsConfig . ) | nindent 2 }}
