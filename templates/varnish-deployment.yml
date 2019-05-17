@@ -38,7 +38,15 @@ spec:
         {{- range .Values.pullSecrets }}
         - name: {{ . }}
         {{- end}}
-      {{- end }}      
+      {{- end }}
+      initContainers:
+      - name: wait-httpd
+        image: jwilder/dockerize        
+        args: 
+        - '-wait'
+        - "http://{{ template "magento.fullname" . }}-httpd:80"
+        - '-timeout'
+        - '180s'
       containers:
       - name: {{ template "magento.fullname" . }}-varnish
         image: {{ template "varnish.image" . }}
