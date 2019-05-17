@@ -93,8 +93,8 @@ varnish:
   enabled: 0
   replicaCount: 1
   registry: hevelop-docker.jfrog.io
-  repository: hevelop/varnish
-  tag: 4.1-stretch
+  repository: cooptilleuls/varnish
+  tag: 4.1-alpine
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
