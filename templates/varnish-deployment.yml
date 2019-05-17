@@ -75,6 +75,8 @@ spec:
             httpHeaders:
             - name: Host
               value: {{ .Values.global.host | quote }}
+            - name: X-Forwarded-Proto
+              value: https
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
