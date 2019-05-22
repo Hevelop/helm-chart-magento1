@@ -1,5 +1,6 @@
 # Changelog
 
+- 6.3.3 Use configmap for php fpm ini conf
 - 6.3.2 Add ip class to varnish acl
 - 6.3.1 Cron command instead
 - 6.3.0 Init Container for varnish

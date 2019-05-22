@@ -61,6 +61,9 @@ phpfpm:
   ## Specify setting for php fpm
   ##
   configVersion: "7.0"
+  ## Use production or development
+  configEnv: production
+  memoryLimit: 256M
   processManager: static
   pmMaxChildren: 5
   PmProcessIdleTimeout: 0

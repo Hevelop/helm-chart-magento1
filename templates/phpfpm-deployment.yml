@@ -72,6 +72,9 @@ spec:
         - name: phpfpm-conf
           mountPath: /usr/local/etc/php-fpm.d/www.conf
           subPath: www.conf
+        - name: phpfpm-ini
+          mountPath: /usr/local/etc/php/php.ini
+          subPath: php.ini-{{ .Values.phpfpm.configEnv }}
         {{- if or .Values.efs.enabled .Values.efs.existingPvcName }}
         - mountPath: /efs
           name: efs
@@ -90,6 +93,10 @@ spec:
           items:
           - key: www.conf
             path: www.conf
+          - key: php.ini-development
+            path: php.ini-development
+          - key: php.ini-production
+            path: php.ini-production
       {{- if .Values.efs.enabled }}
       - name: efs
         persistentVolumeClaim:
