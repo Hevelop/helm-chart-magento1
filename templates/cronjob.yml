@@ -6,9 +6,8 @@
 
 {{- range $job := .Values.jobs }}
 {{- $cron_image := printf "%s/%s:%s" $job.registry $job.repository $job.tag -}}
-
-
 {{- if $job.enabled }}
+---
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
