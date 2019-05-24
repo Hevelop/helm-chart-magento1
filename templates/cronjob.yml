@@ -1,65 +1,77 @@
-{{- if .Values.cron.enabled }}
+{{- $chart_name := .Chart.Name }}
+{{- $chart_version := .Chart.Version | replace "+" "_" }}
+{{- $release_name := .Release.Name }}
+{{- $release_service := .Release.Service }}
+{{- $magento_fullname := include "magento.fullname" . }}
+
+{{- range $job := .Values.jobs }}
+{{- $cron_image := printf "%s/%s:%s" $job.registry $job.repository $job.tag -}}
+
+
+{{- if $job.enabled }}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: {{ template "magento.fullname" . }}-cron
+  name: {{ $magento_fullname }}-cron-{{ $job.name }}
   labels:
-    app: {{ template "magento.fullname" . }}-cron
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    app: {{ $magento_fullname }}-cron
+    chart: "{{ $chart_name }}-{{ $chart_version }}"
+    release: "{{ $release_name }}"
+    heritage: "{{ $release_service }}"
 spec:
-  schedule: "*/1 * * * *"
-  concurrencyPolicy: "Forbid"
-  failedJobsHistoryLimit: 10
+  schedule: {{ $job.schedule | quote }}
+  successfulJobsHistoryLimit: {{ $job.successfulJobsHistoryLimit }}
+  concurrencyPolicy: {{ $job.concurrencyPolicy }}
+  failedJobsHistoryLimit: {{ $job.failedJobsHistoryLimit }}
   jobTemplate:
     spec:
       template:
         metadata:
           labels:
-            app: {{ template "magento.fullname" . }}-cron
-            chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-            release: "{{ .Release.Name }}"
+            app: {{ $magento_fullname }}-cron
+            chart: "{{ $chart_name }}-{{ $chart_version }}"
+            release: "{{ $release_name }}"
         spec:
-          {{- if .Values.pullSecrets }}
+          {{- if $.Values.pullSecrets }}
           imagePullSecrets:
-            {{- range .Values.pullSecrets }}
+            {{- range $.Values.pullSecrets }}
             - name: {{ . }}
             {{- end}}
           {{- end }}
           containers:
-            - name: {{ template "magento.fullname" . }}-cronjob
-              image: {{ template "cron.image" . }}
-              imagePullPolicy: {{ .Values.cron.pullPolicy | quote }}
+            - name: {{ $magento_fullname }}-cronjob-{{ $job.name }}
+              image: {{ $cron_image }}
+              imagePullPolicy: {{ $job.pullPolicy | quote }}
               command:
                 - "su"
                 - "-c"
-                - {{ .Values.cron.command | quote }}
+                - {{ $job.command | quote }}
                 - "-s"
                 - "/bin/sh"
                 - "www-data"
               volumeMounts:
-              {{- if or .Values.efs.enabled .Values.efs.existingPvcName }}
+              {{- if or $.Values.efs.enabled $.Values.efs.existingPvcName }}
                 - mountPath: /efs
                   name: efs
-                {{- range $index, $val := .Values.efs.containerMountPaths }}
+                {{- range $index, $val := $.Values.efs.containerMountPaths }}
                 - mountPath: "/var/www/deploy{{ $val }}"
                   subPath: {{ (trimPrefix "/" $val) }}
                   name: efs
                 {{- end }}
               {{- end }}
               resources:
-{{ toYaml .Values.cron.resources | indent 16 }}
+{{ toYaml $job.resources | indent 16 }}
           volumes:
-          {{- if .Values.efs.enabled }}
+          {{- if $.Values.efs.enabled }}
           - name: efs
             persistentVolumeClaim:
-              claimName: {{ template "magento.fullname" . }}-efs-pvc
+              claimName: {{ $magento_fullname }}-efs-pvc
           {{- end }}
-          {{- if and .Values.efs.existingPvcName (not .Values.efs.enabled) }}
+          {{- if and $.Values.efs.existingPvcName (not $.Values.efs.enabled) }}
           - name: efs
             persistentVolumeClaim:
-              claimName: {{ .Values.efs.existingPvcName }}
+              claimName: {{ $.Values.efs.existingPvcName }}
           {{- end }}
           restartPolicy: Never
+{{- end }}
 {{- end }}
