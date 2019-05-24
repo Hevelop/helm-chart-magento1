@@ -29,3 +29,12 @@ spec:
               serviceName: {{ template "magento.fullname" . }}{{- if .Values.varnish.enabled }}-varnish{{- else }}-httpd{{- end }}
               servicePort: 80
     {{- end }}
+    {{- if .Values.global.thirdHost }}
+    - host: "{{ .Values.global.thirdHost }}"
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: {{ template "magento.fullname" . }}{{- if .Values.varnish.enabled }}-varnish{{- else }}-httpd{{- end }}
+              servicePort: 80
+    {{- end }}
