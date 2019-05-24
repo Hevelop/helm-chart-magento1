@@ -14,7 +14,7 @@ kind: CronJob
 metadata:
   name: {{ $magento_fullname }}-cron-{{ $job.name }}
   labels:
-    app: {{ $magento_fullname }}-cron
+    app: {{ $magento_fullname }}-cron-{{ $job.name }}
     chart: "{{ $chart_name }}-{{ $chart_version }}"
     release: "{{ $release_name }}"
     heritage: "{{ $release_service }}"
@@ -28,7 +28,7 @@ spec:
       template:
         metadata:
           labels:
-            app: {{ $magento_fullname }}-cron
+            app: {{ $magento_fullname }}-cron-{{ $job.name }}
             chart: "{{ $chart_name }}-{{ $chart_version }}"
             release: "{{ $release_name }}"
         spec:
