@@ -188,6 +188,8 @@ sub vcl_backend_response {
         /* marker for vcl_deliver to reset Age: */
         set beresp.http.magicmarker = "1";
     }
+
+    return (deliver);
 }
 
 sub vcl_deliver {
