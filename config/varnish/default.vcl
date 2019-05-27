@@ -144,6 +144,9 @@ sub vcl_backend_response {
         set beresp.grace = 1h;
         set beresp.ttl = 1d;
         set beresp.http.X-Aoestatic-Fetch = "Removed cookie in vcl_backend_response";
+    } else if (beresp.http.X-Aoestatic == "no-cache") {
+        set beresp.ttl = 0s;
+        set beresp.http.X-Aoestatic-Fetch = "Forced to not use cache in vcl_backend_response";
     } else if (bereq.url ~ "^[^?]+\.(css|js|htc|xml|txt|swf|flv|pdf|gif|jpe?g|png|ico|woff)(\?.*)?$") {
         # Known-static file extensions
         unset beresp.http.Set-Cookie;
