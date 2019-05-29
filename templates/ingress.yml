@@ -1,3 +1,5 @@
+{{- $magento_fullname := include "magento.fullname" . }}
+
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -37,4 +39,13 @@ spec:
             backend:
               serviceName: {{ template "magento.fullname" . }}{{- if .Values.varnish.enabled }}-varnish{{- else }}-httpd{{- end }}
               servicePort: 80
+    {{- end }}
+    {{- range $rule := .Values.loadBalancer.rules }}
+    - host: {{ $rule.host }}
+      http:
+        paths:
+          - path: {{ $rule.path }}
+            backend:
+              serviceName: {{ $magento_fullname }}-{{ $rule.service }}
+              servicePort: 80  
     {{- end }}

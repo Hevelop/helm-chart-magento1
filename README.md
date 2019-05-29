@@ -1,5 +1,6 @@
 # Changelog
 
+- 6.4.1 Ingress multiple rule from answer
 - 6.4.0 Multiple CronJobs
 - 6.3.4 Added Third domain
 - 6.3.3 Use configmap for php fpm ini conf

@@ -260,6 +260,10 @@ mariadb:
       size: 8Gi      
 
 loadBalancer:
+  rules: []
+  # - host: magento.hevelop.com
+  #   path: /*
+  #   service: httpd
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
