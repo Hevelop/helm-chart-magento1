@@ -72,5 +72,7 @@ spec:
               claimName: {{ $.Values.efs.existingPvcName }}
           {{- end }}
           restartPolicy: Never
+          affinity:
+{{ toYaml $job.affinity | indent 12 }}
 {{- end }}
 {{- end }}

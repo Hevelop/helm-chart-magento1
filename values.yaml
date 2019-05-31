@@ -149,6 +149,13 @@ jobs:
       limits:
         memory: 512Mi
         cpu: 500m
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: node-role.kubernetes.io/etcd
+              operator: DoesNotExist
 
 prehook:
   enabled: false
