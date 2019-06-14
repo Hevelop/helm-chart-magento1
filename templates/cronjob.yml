@@ -37,7 +37,7 @@ spec:
             - name: {{ . }}
             {{- end}}
           {{- end }}
-          {{- if or .Values.efs.enabled .Values.efs.existingPvcName }}
+          {{- if or $.Values.efs.enabled $.Values.efs.existingPvcName }}
           initContainers:
           - name: volume-permissions
             image: alpine
@@ -45,14 +45,14 @@ spec:
             args: 
             - |
               chown -c 82:82 /efs &&
-            {{- range $index, $val := .Values.efs.containerMountPaths }}
+            {{- range $index, $val := $.Values.efs.containerMountPaths }}
               chown -c 82:82 /var/www/deploy{{ $val }} &&
             {{- end }}
               ls -la /var/www/deploy/htdocs
             volumeMounts:
             - mountPath: /efs
               name: efs
-            {{- range $index, $val := .Values.efs.containerMountPaths }}
+            {{- range $index, $val := $.Values.efs.containerMountPaths }}
             - mountPath: "/var/www/deploy{{ $val }}"
               subPath: {{ (trimPrefix "/" $val) }}
               name: efs
