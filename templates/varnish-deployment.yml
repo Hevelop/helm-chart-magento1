@@ -50,6 +50,13 @@ spec:
       containers:
       - name: {{ template "magento.fullname" . }}-varnish
         image: {{ template "varnish.image" . }}
+        command: ['varnishd']
+        args:
+          - "-F"
+          - "-f"
+          - "/usr/local/etc/varnish/default.vcl"
+          - "-s malloc,{{ .Values.varnish.malloc }}"
+        #- "-s file,/var/lib/varnish/storage/varnish_storage.bin,512m"
         imagePullPolicy: {{ .Values.varnish.pullPolicy | quote }}
         lifecycle:
           preStop:
