@@ -67,6 +67,10 @@ phpfpm:
   ## Use production or development
   configEnv: production
   memoryLimit: 256M
+  maxExecutionTime: 30
+  maxInputTime: 60
+  postMaxSize: 8M
+  uploadMaxFilesize: 2M
   processManager: static
   pmMaxChildren: 5
   PmProcessIdleTimeout: 0

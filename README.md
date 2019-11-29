@@ -1,5 +1,6 @@
 # Changelog
 
+- 6.4.4 Add parameter for php.ini 7.0
 - 6.4.3 Added timeout config for httpd
 - 6.4.2 Added affinity for cron jobs
 - 6.4.1 Ingress multiple rule from answer
