@@ -79,13 +79,6 @@ spec:
                   name: efs
                 {{- end }}
               {{- end }}
-              {{- if $.Values.logs.enabled }}
-              {{- range $index, $val := $.Values.logs.containerMountPaths }}
-                - mountPath: "/var/www/deploy{{ $val }}"
-                  subPath: {{ (trimPrefix "/" $val) }}
-                  name: logs
-              {{- end }}
-              {{- end }}
               resources:
 {{ toYaml $job.resources | indent 16 }}
           volumes:
@@ -98,12 +91,6 @@ spec:
           - name: efs
             persistentVolumeClaim:
               claimName: {{ $.Values.efs.existingPvcName }}
-          {{- end }}
-          {{- if $.Values.logs.enabled }}
-          - name: logs
-            hostPath:
-              path: /var/log/magentologs
-              type: DirectoryOrCreate
           {{- end }}
           restartPolicy: Never
           affinity:
