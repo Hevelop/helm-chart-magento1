@@ -99,7 +99,7 @@ spec:
             persistentVolumeClaim:
               claimName: {{ $.Values.efs.existingPvcName }}
           {{- end }}
-          {{- if .Values.logs.enabled }}
+          {{- if $.Values.logs.enabled }}
           - name: logs
             hostPath:
               path: /var/log/magentologs
