@@ -102,6 +102,13 @@ spec:
           name: efs
         {{- end }}
         {{- end }}
+        {{- if .Values.logs.enabled }}
+        {{- range $index, $val := .Values.logs.containerMountPaths }}
+        - mountPath: "/var/www/deploy{{ $val }}"
+          subPath: {{ (trimPrefix "/" $val) }}
+          name: logs
+        {{- end }}
+        {{- end }}
         resources:
 {{ toYaml .Values.httpd.resources | indent 10 }}
       volumes:
@@ -125,6 +132,11 @@ spec:
       - name: efs
         persistentVolumeClaim:
           claimName: {{ template "magento.fullname" . }}-efs-pvc
+      {{- end }}
+      {{- if .Values.logs.enabled }}
+      - name: logs
+        hostPath:
+          path: /var/magentologs
       {{- end }}
       {{- if and .Values.efs.existingPvcName (not .Values.efs.enabled) }}
       - name: efs
