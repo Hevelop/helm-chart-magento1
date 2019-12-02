@@ -209,6 +209,11 @@ efs:
     # - /htdocs/media
     # - /htdocs/sitemaps
 
+logs:
+  enabled: true
+  containerMountPaths: []
+  # - /htdocs/var/log
+
 ##
 ## External database configuration
 ##
