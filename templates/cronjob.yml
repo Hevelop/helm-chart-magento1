@@ -79,8 +79,8 @@ spec:
                   name: efs
                 {{- end }}
               {{- end }}
-              {{- if .Values.logs.enabled }}
-              {{- range $index, $val := .Values.logs.containerMountPaths }}
+              {{- if $.Values.logs.enabled }}
+              {{- range $index, $val := $.Values.logs.containerMountPaths }}
                 - mountPath: "/var/www/deploy{{ $val }}"
                   subPath: {{ (trimPrefix "/" $val) }}
                   name: logs
