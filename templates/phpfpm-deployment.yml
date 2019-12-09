@@ -64,7 +64,7 @@ spec:
         {{- if .Values.logs.enabled }}
         {{- range $index, $val := .Values.logs.containerMountPaths }}
         - mountPath: "{{ $.Values.logs.containerMountPath }}"
-          subPath: {{ $val }}
+          subPath: {{ $.Values.logs.containerMountPath }}
           name: logs
         {{- end }}
         {{- end }}
