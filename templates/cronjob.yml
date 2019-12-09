@@ -48,6 +48,9 @@ spec:
             {{- range $index, $val := $.Values.efs.containerMountPaths }}
               chown -c 82:82 /var/www/deploy{{ $val }} &&
             {{- end }}
+            {{- range $index, $val := .Values.logs.containerMountPaths }}
+              chown -c 82:82 /var/www/deploy{{ $val }} &&
+            {{- end }}
               ls -la /var/www/deploy/htdocs
             volumeMounts:
             - mountPath: /efs
