@@ -77,7 +77,7 @@ spec:
           - |
             paths='';
             {{- range $index, $val := .Values.logs.containerMountPaths }}
-            paths="${paths} /var/www/deploy{{ $val }}";
+            paths="${paths} {{ $.Values.logs.containerMountPath }}{{ $val }}";
             {{- end }}
             bash /bin/multiTail.sh ${paths}
         volumeMounts:
