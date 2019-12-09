@@ -103,11 +103,9 @@ spec:
         {{- end }}
         {{- end }}
         {{- if .Values.logs.enabled }}
-        {{- range $index, $val := .Values.logs.containerMountPaths }}
-        - mountPath: "{{ $.Values.logs.containerMountPath }}/{{ $val }}"
-          subPath: {{ $val }}
+        - mountPath: "{{ $.Values.logs.containerMountPath }}"
+          subPath: {{ $.Values.logs.containerMountPath }}
           name: logs
-        {{- end }}
         {{- end }}
         resources:
 {{ toYaml .Values.httpd.resources | indent 10 }}

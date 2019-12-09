@@ -62,11 +62,9 @@ spec:
           name: efs
         {{- end }}
         {{- if .Values.logs.enabled }}
-        {{- range $index, $val := .Values.logs.containerMountPaths }}
-        - mountPath: "{{ $.Values.logs.containerMountPath }}/{{ $val }}"
-          subPath: {{ $val }}
+        - mountPath: "{{ $.Values.logs.containerMountPath }}"
+          subPath: {{ $.Values.logs.containerMountPath }}
           name: logs
-        {{- end }}
         {{- end }}
       {{- end }}
       containers:
@@ -89,11 +87,9 @@ spec:
             name: efs
             {{- end }}
           {{- if .Values.logs.enabled }}
-          {{- range $index, $val := .Values.logs.containerMountPaths }}
-          - mountPath: "{{ $.Values.logs.containerMountPath }}/{{ $val }}"
-            subPath: {{ $val }}
+          - mountPath: "{{ $.Values.logs.containerMountPath }}"
+            subPath: {{ $.Values.logs.containerMountPath }}
             name: logs
-          {{- end }}
           {{- end }}
           - name: sidecar-conf
             mountPath: /bin/multiTail.sh
