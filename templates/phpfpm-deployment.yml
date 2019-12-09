@@ -143,7 +143,7 @@ spec:
       {{- if .Values.logs.enabled }}
       - name: logs
         hostPath:
-          path: /var/log
+          path: /var/log/magentologs
           type: DirectoryOrCreate
       {{- end }}
       {{- if and .Values.efs.existingPvcName (not .Values.efs.enabled) }}
