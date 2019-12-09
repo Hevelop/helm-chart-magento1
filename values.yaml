@@ -211,6 +211,7 @@ efs:
 
 logs:
   enabled: true
+  image: bash
   containerMountPaths: []
   # - /htdocs/var/log
 

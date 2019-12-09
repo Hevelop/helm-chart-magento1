@@ -111,9 +111,7 @@ spec:
           {{- end }}
           {{- if $.Values.logs.enabled }}
           - name: logs
-            hostPath:
-              path: /var/log/magentologs
-              type: DirectoryOrCreate
+            emptyDir: {}
           {{- end }}
           restartPolicy: Never
           affinity:

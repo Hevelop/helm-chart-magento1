@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "magento.fullname" . }}-sidecar
+  labels:
+    app: {{ template "magento.fullname" . }}-sidecar
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+    {{- (tpl (.Files.Glob (printf "%s%s%s" "bin/*" )).AsConfig . ) | nindent 2 }}
