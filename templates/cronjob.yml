@@ -61,9 +61,11 @@ spec:
               name: efs
             {{- end }}
             {{- if $.Values.logs.enabled }}
-            - mountPath: "{{ $.Values.logs.containerMountPath }}"
-              subPath: {{ $.Values.logs.containerMountPath }}
+            {{- range $index, $val := $.Values.logs.containerMountPaths }}
+            - mountPath: "{{ $.Values.logs.containerMountPath }}/{{ $val }}"
+              subPath: {{ $val }}
               name: logs
+            {{- end }}
             {{- end }}
           {{- end }}
           containers:
@@ -88,9 +90,11 @@ spec:
                 {{- end }}
               {{- end }}
               {{- if $.Values.logs.enabled }}
-              - mountPath: "{{ $.Values.logs.containerMountPath }}"
-                subPath: {{ $.Values.logs.containerMountPath }}
-                name: logs
+              {{- range $index, $val := $.Values.logs.containerMountPaths }}
+                - mountPath: "{{ $.Values.logs.containerMountPath }}/{{ $val }}"
+                  subPath: {{ $val }}
+                  name: logs
+              {{- end }}
               {{- end }}
               resources:
 {{ toYaml $job.resources | indent 16 }}
