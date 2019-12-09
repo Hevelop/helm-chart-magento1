@@ -63,8 +63,8 @@ spec:
         {{- end }}
         {{- if .Values.logs.enabled }}
         {{- range $index, $val := .Values.logs.containerMountPaths }}
-        - mountPath: "/var/www/deploy{{ $val }}"
-          subPath: {{ (trimPrefix "/" $val) }}
+        - mountPath: "{{ $.Values.logs.containerMountPath }}"
+          subPath: {{ $val }}
           name: logs
         {{- end }}
         {{- end }}
@@ -88,13 +88,13 @@ spec:
             subPath: {{ (trimPrefix "/" $val) }}
             name: efs
             {{- end }}
-            {{- if .Values.logs.enabled }}
-            {{- range $index, $val := .Values.logs.containerMountPaths }}
+          {{- if .Values.logs.enabled }}
+          {{- range $index, $val := .Values.logs.containerMountPaths }}
           - mountPath: "{{ $.Values.logs.containerMountPath }}"
             subPath: {{ $val }}
             name: logs
-            {{- end }}
-            {{- end }}
+          {{- end }}
+          {{- end }}
           - name: sidecar-conf
             mountPath: /bin/multiTail.sh
             subPath: multiTail.sh
