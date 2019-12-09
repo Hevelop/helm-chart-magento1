@@ -49,7 +49,7 @@ spec:
               chown -c 82:82 /var/www/deploy{{ $val }} &&
             {{- end }}
             {{- range $index, $val := $.Values.logs.containerMountPaths }}
-              chown -c 82:82 /var/www/deploy{{ $val }} &&
+              chown -c 82:82 {{ $.Values.logs.containerMountPath }}/{{ $val }} &&
             {{- end }}
               ls -la /var/www/deploy/htdocs
             volumeMounts:
@@ -60,10 +60,10 @@ spec:
               subPath: {{ (trimPrefix "/" $val) }}
               name: efs
             {{- end }}
-            {{- if $.Values.logs.enabled }}
+            {{- if .Values.logs.enabled }}
             {{- range $index, $val := $.Values.logs.containerMountPaths }}
-            - mountPath: "/var/www/deploy{{ $val }}"
-              subPath: {{ (trimPrefix "/" $val) }}
+            - mountPath: "{{ $.Values.logs.containerMountPath }}/{{ $val }}"
+              subPath: {{ $val }}
               name: logs
             {{- end }}
             {{- end }}
@@ -89,10 +89,10 @@ spec:
                   name: efs
                 {{- end }}
               {{- end }}
-              {{- if $.Values.logs.enabled }}
+              {{- if .Values.logs.enabled }}
               {{- range $index, $val := $.Values.logs.containerMountPaths }}
-                - mountPath: "/var/www/deploy{{ $val }}"
-                  subPath: {{ (trimPrefix "/" $val) }}
+                - mountPath: "{{ $.Values.logs.containerMountPath }}/{{ $val }}"
+                  subPath: {{ $val }}
                   name: logs
               {{- end }}
               {{- end }}
