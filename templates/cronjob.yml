@@ -113,6 +113,7 @@ spec:
           - name: logs
             hostPath:
               path: /var/log
+              type: DirectoryOrCreate
           {{- end }}
           restartPolicy: Never
           affinity:
