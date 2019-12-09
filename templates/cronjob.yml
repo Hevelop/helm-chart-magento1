@@ -89,7 +89,7 @@ spec:
                   name: efs
                 {{- end }}
               {{- end }}
-              {{- if .Values.logs.enabled }}
+              {{- if $.Values.logs.enabled }}
               {{- range $index, $val := $.Values.logs.containerMountPaths }}
                 - mountPath: "{{ $.Values.logs.containerMountPath }}/{{ $val }}"
                   subPath: {{ $val }}
