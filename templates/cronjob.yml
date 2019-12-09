@@ -63,7 +63,7 @@ spec:
             {{- range $index, $val := $.Values.logs.containerMountPaths }}
             - mountPath: "/var/www/deploy{{ $val }}"
               subPath: {{ (trimPrefix "/" $val) }}
-              name: efs
+              name: logs
             {{- end }}
           {{- end }}
           containers:
