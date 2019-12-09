@@ -62,7 +62,6 @@ spec:
             {{- end }}
             {{- if $.Values.logs.enabled }}
             - mountPath: "{{ $.Values.logs.containerMountPath }}"
-              subPath: {{ (trimPrefix "/" $.Values.logs.containerMountPath) }}
               name: logs
             {{- end }}
           {{- end }}
@@ -89,7 +88,6 @@ spec:
               {{- end }}
               {{- if $.Values.logs.enabled }}
                 - mountPath: "{{ $.Values.logs.containerMountPath }}"
-                  subPath: {{ (trimPrefix "/" $.Values.logs.containerMountPath) }}
                   name: logs
               {{- end }}
               resources:
