@@ -72,7 +72,7 @@ spec:
       containers:
       - name: {{ template "magento.fullname" . }}-phpfpm-logs
         image: {{ .Values.logs.image }}
-        command: ["/bin/bash","-c"]
+        command: ["/usr/local/bin/bash","-c"]
         args:
           - |
             paths='';
