@@ -10,6 +10,7 @@ do
     do
         touch ${file}
         chown 82:82 ${file}
+        fileescaped=${file//\//\\\/}
         command="${command}tail -f ${file} | sed \"s/^/[${fileescaped}]/\" & "
     done;
 done;
