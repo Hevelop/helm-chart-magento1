@@ -50,7 +50,7 @@ spec:
           chown -c 82:82 /var/www/deploy{{ $val }} &&
         {{- end }}
         {{- range $index, $val := .Values.logs.containerMountPaths }}
-          chown -c 82:82 {{ $.Values.logs.containerMountPath }}/{{ $val }} &&
+          touch {{ $.Values.logs.containerMountPath }}/{{ $val }} && chown -c 82:82 {{ $.Values.logs.containerMountPath }}/{{ $val }} &&
         {{- end }}
           ls -la /var/www/deploy/htdocs
         volumeMounts:
