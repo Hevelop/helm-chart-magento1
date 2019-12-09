@@ -6,7 +6,7 @@ command="";
 
 for path in $paths
 do
-    for file in $1/*
+    for file in $path
     do
         command="${command}tail -f ${file} | sed \"s/^/[${fileescaped}]/\" & "
     done;
