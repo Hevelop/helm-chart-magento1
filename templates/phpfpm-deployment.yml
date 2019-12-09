@@ -64,7 +64,6 @@ spec:
         {{- if .Values.logs.enabled }}
         {{- range $index, $val := .Values.logs.containerMountPaths }}
         - mountPath: "/var/www/deploy{{ $val }}"
-          subPath: {{ (trimPrefix "/" $val) }}
           name: logs
         {{- end }}
         {{- end }}
@@ -118,7 +117,6 @@ spec:
         {{- if .Values.logs.enabled }}
         {{- range $index, $val := .Values.logs.containerMountPaths }}
         - mountPath: "/var/www/deploy{{ $val }}"
-          subPath: {{ (trimPrefix "/" $val) }}
           name: logs
         {{- end }}
         {{- end }}
