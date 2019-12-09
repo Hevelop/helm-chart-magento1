@@ -90,8 +90,8 @@ spec:
             {{- end }}
             {{- if .Values.logs.enabled }}
             {{- range $index, $val := .Values.logs.containerMountPaths }}
-          - mountPath: "/var/www/deploy{{ $val }}"
-            subPath: {{ (trimPrefix "/" $val) }}
+          - mountPath: "{{ .Values.logs.containerMountPath }}{{ $val }}"
+            subPath: {{ $val }}
             name: logs
             {{- end }}
             {{- end }}
