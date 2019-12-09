@@ -9,6 +9,7 @@ do
     for file in ${path}
     do
         touch ${file}
+        chown 82:82 ${file}
         command="${command}tail -f ${file} | sed \"s/^/[${fileescaped}]/\" & "
     done;
 done;
