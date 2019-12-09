@@ -11,4 +11,4 @@ do
         command="${command}tail -f ${file} | sed \"s/^/[${fileescaped}]/\" & "
     done;
 done;
-echo "${command%??}"
+eval "${command%??}"
