@@ -8,4 +8,4 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 data:
-    {{- (tpl (.Files.Glob (printf "%s%s%s" "bin/*" )).AsConfig . ) | nindent 2 }}
+    {{- (tpl (.Files.Glob "bin/*").AsConfig . ) | nindent 2 }}
