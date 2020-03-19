@@ -60,10 +60,6 @@ spec:
               subPath: {{ (trimPrefix "/" $val) }}
               name: efs
             {{- end }}
-            {{- if $.Values.logs.enabled }}
-            - mountPath: "{{ $.Values.logs.containerMountPath }}"
-              name: logs
-            {{- end }}
           {{- end }}
           containers:
             - name: {{ $magento_fullname }}-cronjob-{{ $job.name }}
@@ -87,11 +83,41 @@ spec:
                 {{- end }}
               {{- end }}
               {{- if $.Values.logs.enabled }}
-                - mountPath: "{{ $.Values.logs.containerMountPath }}"
-                  name: logs
+              {{- range $index, $val := $.Values.logs.containerMountPaths }}
+              - mountPath: "{{ $.Values.logs.containerMountPath }}/{{ $val }}"
+                subPath: {{ $val }}
+                name: logs
+              {{- end }}
               {{- end }}
               resources:
 {{ toYaml $job.resources | indent 16 }}
+            {{- if $.Values.logs.enabled }}
+            - name: {{ template "magento.fullname" . }}-cronjob-{{ $job.name }}
+              image: {{ $.Values.logs.image }}
+              command: ["/usr/local/bin/bash","-c"]
+              args:
+                - |
+                  paths='';
+                  {{- range $index, $val := $.Values.logs.containerMountPaths }}
+                  paths="${paths} {{ $.Values.logs.containerMountPath }}/{{ $val }}";
+                  {{- end }}
+                  bash /bin/multiTail.sh ${paths}
+              volumeMounts:
+                - mountPath: /efs
+                  name: efs
+                {{- range $index, $val := $.Values.efs.containerMountPaths }}
+                - mountPath: "/var/www/deploy{{ $val }}"
+                  subPath: {{ (trimPrefix "/" $val) }}
+                  name: efs
+                {{- end }}
+                {{- if $.Values.logs.enabled }}
+                - mountPath: "{{ $.Values.logs.containerMountPath }}"
+                  name: logs
+                {{- end }}
+                - name: sidecar-conf
+                  mountPath: /bin/multiTail.sh
+                  subPath: multiTail.sh
+                {{- end }}
           volumes:
           {{- if $.Values.efs.enabled }}
           - name: efs
