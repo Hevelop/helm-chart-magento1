@@ -63,6 +63,10 @@ spec:
               subPath: {{ (trimPrefix "/" $val) }}
               name: efs
             {{- end }}
+            {{- if $.Values.logs.enabled }}
+            - mountPath: "{{ $.Values.logs.containerMountPath }}"
+              name: logs
+            {{- end }}
           {{- end }}
           containers:
             - name: {{ $magento_fullname }}-cronjob-{{ $job.name }}
