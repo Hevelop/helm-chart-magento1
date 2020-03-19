@@ -92,7 +92,7 @@ spec:
               resources:
 {{ toYaml $job.resources | indent 16 }}
             {{- if $.Values.logs.enabled }}
-            - name: {{ $magento_fullname }}-cronjob-{{ $job.name }}
+            - name: {{ $magento_fullname }}-cronjob-logs-{{ $job.name }}
               image: {{ $.Values.logs.image }}
               command: ["/usr/local/bin/bash","-c"]
               args:
