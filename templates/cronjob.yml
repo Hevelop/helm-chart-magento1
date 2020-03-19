@@ -48,9 +48,11 @@ spec:
             {{- range $index, $val := $.Values.efs.containerMountPaths }}
               chown -c 82:82 /var/www/deploy{{ $val }} &&
             {{- end }}
+            {{- if $.Values.logs.enabled }}
               mkdir -p {{ $.Values.logs.containerMountPath }}/ &&
             {{- range $index, $val := $.Values.logs.containerMountPaths }}
               touch {{ $.Values.logs.containerMountPath }}/{{ $val }} && chown -c 82:82 {{ $.Values.logs.containerMountPath }}/{{ $val }} &&
+            {{- end }}
             {{- end }}
               ls -la /var/www/deploy/htdocs
             volumeMounts:
