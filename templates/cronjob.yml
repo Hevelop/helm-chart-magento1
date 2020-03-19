@@ -63,7 +63,7 @@ spec:
               subPath: {{ (trimPrefix "/" $val) }}
               name: efs
             {{- end }}
-            {{- if .Values.logs.enabled }}
+            {{- if $.Values.logs.enabled }}
             - mountPath: "{{ $.Values.logs.containerMountPath }}"
               name: logs
             {{- end }}
