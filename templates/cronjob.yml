@@ -140,6 +140,12 @@ spec:
           - name: logs
             emptyDir: {}
           {{- end }}
+          - name: sidecar-conf
+            configMap:
+              name: {{ template "magento.fullname" . }}-sidecar
+              items:
+                - key: multiTail.sh
+                  path: multiTail.sh
           restartPolicy: Never
           affinity:
 {{ toYaml $job.affinity | indent 12 }}
