@@ -1,3 +1,4 @@
+apiVersion: v2
 name: magento1
 version: 6.4.4
 description: Hevelop helm chart for mangento1.
@@ -15,3 +16,12 @@ maintainers:
   email: systems@hevelop.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/magento/img/magento-stack-110x117.png
+dependencies:
+  - name: mariadb
+    version: 5.x.x
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    condition: mariadb.enabled
+  - name: efs-provisioner
+    version: 0.x.x
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    condition: efs.enabled
