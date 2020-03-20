@@ -142,7 +142,7 @@ spec:
           {{- end }}
           - name: sidecar-conf
             configMap:
-              name: {{ template "magento.fullname" . }}-sidecar
+              name: {{ $magento_fullname }}-sidecar
               items:
                 - key: multiTail.sh
                   path: multiTail.sh
