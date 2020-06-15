@@ -1,5 +1,6 @@
 # Changelog
 
+- 6.4.6 Add parameter to enable php.ini 7.0 status page
 - 6.4.5 Add parameter to limit the duration of the job
 - 6.4.4 Add parameter for php.ini 7.0
 - 6.4.3 Added timeout config for httpd

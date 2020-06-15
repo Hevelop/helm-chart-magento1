@@ -76,6 +76,7 @@ phpfpm:
   PmProcessIdleTimeout: 0
   PmMaxRequests: 500
   RequestTerminateTimeout: 0
+  PmStatusPathEnabled: false
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -147,6 +148,7 @@ jobs:
     schedule: "* * * * *"
     failedJobsHistoryLimit: 10
     successfulJobsHistoryLimit: 3
+    activeDeadlineSeconds: 0
     concurrencyPolicy: Forbid
     restartPolicy: OnFailure
     resources:
