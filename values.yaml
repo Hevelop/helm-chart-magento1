@@ -148,9 +148,7 @@ jobs:
     schedule: "* * * * *"
     failedJobsHistoryLimit: 10
     successfulJobsHistoryLimit: 3
-    deadlineSeconds:
-      enabled: false
-      value: 2400
+    activeDeadlineSeconds: 2400
     concurrencyPolicy: Forbid
     restartPolicy: OnFailure
     resources:
