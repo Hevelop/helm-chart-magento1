@@ -24,6 +24,9 @@ spec:
   failedJobsHistoryLimit: {{ $job.failedJobsHistoryLimit }}
   jobTemplate:
     spec:
+      {{- if $job.activeDeadlineSeconds }}
+      activeDeadlineSeconds: {{ $job.activeDeadlineSeconds | quote }}
+      {{- end }}
       template:
         metadata:
           labels:
