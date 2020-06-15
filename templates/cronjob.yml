@@ -24,8 +24,8 @@ spec:
   failedJobsHistoryLimit: {{ $job.failedJobsHistoryLimit }}
   jobTemplate:
     spec:
-      {{- if $job.activeDeadlineSeconds }}
-      activeDeadlineSeconds: {{ $job.activeDeadlineSeconds | quote }}
+      {{- if $job.deadlineSeconds.enabled }}
+      activeDeadlineSeconds: {{ $job.deadlineSeconds.value }}
       {{- end }}
       template:
         metadata:
@@ -34,6 +34,9 @@ spec:
             chart: "{{ $chart_name }}-{{ $chart_version }}"
             release: "{{ $release_name }}"
         spec:
+          {{- if $job.deadlineSeconds.enabled }}
+          activeDeadlineSeconds: {{ $job.deadlineSeconds.value }}
+          {{- end }}
           {{- if $.Values.pullSecrets }}
           imagePullSecrets:
             {{- range $.Values.pullSecrets }}
