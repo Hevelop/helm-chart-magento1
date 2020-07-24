@@ -47,5 +47,5 @@ spec:
           - path: {{ $rule.path }}
             backend:
               serviceName: {{ $magento_fullname }}-{{ $rule.service }}
-              servicePort: 80  
+              servicePort: {{ or $rule.port 80 }}
     {{- end }}
