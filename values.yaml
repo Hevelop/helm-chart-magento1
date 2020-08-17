@@ -51,7 +51,7 @@ httpd:
       - "-k"
       - "graceful-stop"
   hpa:
-    enabled: true
+    enabled: false
     minReplicas: 5
     maxReplicas: 20
     metrics:
@@ -111,7 +111,7 @@ phpfpm:
         kill -3 1
         while kill -0 1;do sleep 1;done;
   hpa:
-    enabled: true
+    enabled: false
     minReplicas: 10
     maxReplicas: 40
     metrics:

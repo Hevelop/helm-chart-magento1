@@ -19,7 +19,7 @@ spec:
           type: {{ $val.target.type }}
       type: {{ $val.type }}
   {{- end }}
-  minReplicas: 10
+  minReplicas: {{ .Values.phpfpm.hpa.minReplicas }}
   scaleTargetRef:
   {{- if .Capabilities.APIVersions.Has "apps/v1" }}
     apiVersion: apps/v1
