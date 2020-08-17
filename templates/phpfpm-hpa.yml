@@ -1,4 +1,5 @@
 {{- if .Capabilities.APIVersions.Has "autoscaling/v2beta2" }}
+  {{- if .Values.httpd.phpfpm.enabled }}
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -28,4 +29,5 @@ spec:
   {{- end }}
     kind: Deployment
     name: {{ template "magento.fullname" . }}-phpfpm
+  {{- end }}
 {{- end }}
