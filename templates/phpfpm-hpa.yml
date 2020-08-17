@@ -2,16 +2,16 @@
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ template "magento.fullname" . }}-fpm
+  name: {{ template "magento.fullname" . }}-phpfpm
   labels:
-    app: {{ template "magento.fullname" . }}-fpm
+    app: {{ template "magento.fullname" . }}-phpfpm
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  maxReplicas: {{ .Values.fpm.hpa.maxReplicas }}
+  maxReplicas: {{ .Values.phpfpm.hpa.maxReplicas }}
   metrics:
-    {{- range $index, $val := .Values.fpm.hpa.metrics }}
+    {{- range $index, $val := .Values.phpfpm.hpa.metrics }}
     - resource:
         name: {{ $val.name }}
         target:
@@ -27,5 +27,5 @@ spec:
     apiVersion: apps/v1beta2
   {{- end }}
     kind: Deployment
-    name: {{ template "magento.fullname" . }}-fpm
+    name: {{ template "magento.fullname" . }}-phpfpm
 {{- end }}
