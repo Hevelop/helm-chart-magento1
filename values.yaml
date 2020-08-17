@@ -50,6 +50,16 @@ httpd:
       - "httpd"
       - "-k"
       - "graceful-stop"
+  hpa:
+    enabled: true
+    minReplicas: 5
+    maxReplicas: 20
+    metrics:
+      - name: cpu
+        type: Resource
+        target:
+          averageUtilization: 60%
+          type: Utilization
 
 phpfpm:
   replicaCount: 1
@@ -100,6 +110,17 @@ phpfpm:
       - |-
         kill -3 1
         while kill -0 1;do sleep 1;done;
+  hpa:
+    enabled: true
+    minReplicas: 10
+    maxReplicas: 40
+    metrics:
+      - name: cpu
+        type: Resource
+        target:
+          averageUtilization: 60%
+          type: Utilization
+
 varnish:
   enabled: 0
   replicaCount: 1
