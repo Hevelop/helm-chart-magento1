@@ -1,5 +1,4 @@
-{{- if .Capabilities.APIVersions.Has "autoscaling/v2beta2" }}
-  {{- if .Values.httpd.hpa.enabled }}
+{{- if .Values.httpd.hpa.enabled }}
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -29,5 +28,4 @@ spec:
   {{- end }}
     kind: Deployment
     name: {{ template "magento.fullname" . }}-httpd
-  {{- end }}
 {{- end }}
