@@ -58,7 +58,7 @@ httpd:
       - name: cpu
         type: Resource
         target:
-          averageUtilization: 60%
+          averageUtilization: 60
           type: Utilization
 
 phpfpm:
@@ -118,7 +118,7 @@ phpfpm:
       - name: cpu
         type: Resource
         target:
-          averageUtilization: 60%
+          averageUtilization: 60
           type: Utilization
 
 varnish:
