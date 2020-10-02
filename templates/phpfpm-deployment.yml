@@ -52,6 +52,7 @@ spec:
         {{- range $index, $val := .Values.logs.containerMountPaths }}
           touch {{ $.Values.logs.containerMountPath }}/{{ $val }} && chown -c 82:82 {{ $.Values.logs.containerMountPath }}/{{ $val }} &&
         {{- end }}
+          ls -la /var/www/deploy
         volumeMounts:
         - mountPath: /efs
           name: efs
