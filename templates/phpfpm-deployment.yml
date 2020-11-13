@@ -70,10 +70,12 @@ spec:
       - name: {{ template "magento.fullname" . }}-phpfpm
         image: {{ template "phpfpm.image" . }}
         imagePullPolicy: {{ .Values.phpfpm.pullPolicy | quote }}
+        {{- if .Values.phpfpm.lifecycle.preStopCommand }}
         lifecycle:
           preStop:
             exec:
-              command: {{ .Values.phpfpm.lifecycle.preStopCommand }}
+              command: {{toJson .Values.phpfpm.lifecycle.preStopCommand}}
+        {{- end }}
         ports:
         - containerPort: 9000
         {{- if .Values.phpfpm.livenessProbe.enabled }}
@@ -103,6 +105,9 @@ spec:
         - name: phpfpm-conf
           mountPath: /usr/local/etc/php/php.ini
           subPath: php.ini-{{ .Values.phpfpm.configEnv }}
+        - name: phpfpm-conf
+          mountPath: /usr/local/etc/php-fpm.d/k8s.conf
+          subPath: k8s.conf
         {{- if or .Values.efs.enabled .Values.efs.existingPvcName }}
         - mountPath: /efs
           name: efs
@@ -159,6 +164,8 @@ spec:
             path: php.ini-development
           - key: php.ini-production
             path: php.ini-production
+          - key: k8s.conf
+            path: k8s.conf
       - name: sidecar-conf
         configMap:
           name: {{ template "magento.fullname" . }}-sidecar
@@ -179,4 +186,6 @@ spec:
         persistentVolumeClaim:
           claimName: {{ .Values.efs.existingPvcName }}
       {{- end }}
-      # terminationGracePeriodSeconds: {{ .Values.phpfpm.terminationGracePeriodSeconds | quote }}
+      {{- if .Values.phpfpm.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.phpfpm.terminationGracePeriodSeconds }}
+      {{- end }}

@@ -87,6 +87,7 @@ phpfpm:
   PmMaxRequests: 500
   RequestTerminateTimeout: 0
   PmStatusPathEnabled: false
+  processControlTimeout: 120s
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -105,6 +106,8 @@ phpfpm:
     maxUnavailable: 25%
     maxSurge: 25%
   terminationGracePeriodSeconds: 60
+  # php-fpm need `process_control_timeout` configured to graceful shutdown correctly
+  # https://medium.com/flant-com/kubernetes-graceful-shutdown-nginx-php-fpm-d5ab266963c2
   lifecycle:
     preStopCommand:
       - |-

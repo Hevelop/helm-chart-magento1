@@ -50,10 +50,12 @@ spec:
       - name: {{ template "magento.fullname" . }}-httpd
         image: {{ template "httpd.image" . }}
         imagePullPolicy: {{ .Values.httpd.pullPolicy | quote }}
+        {{- if .Values.httpd.lifecycle.preStopCommand }}
         lifecycle:
           preStop:
             exec:
-              command: {{ .Values.httpd.lifecycle.preStopCommand }}
+              command: {{toJson .Values.httpd.lifecycle.preStopCommand }}
+        {{- end }}
         ports:
         - containerPort: 80
         {{- if .Values.httpd.livenessProbe.enabled }}
