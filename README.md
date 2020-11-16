@@ -1,5 +1,6 @@
 # Changelog
 
+- 6.6.1 values lifecycle fix
 - 6.6.0 graceful stop for php-fpm and hhtpd
 - 6.4.7 Add parameter to enable php.ini 7.0 status page, add parameter to limit the duration of the job
 - 6.4.4 Add parameter for php.ini 7.0

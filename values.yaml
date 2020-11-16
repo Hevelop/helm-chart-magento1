@@ -110,9 +110,9 @@ phpfpm:
   # https://medium.com/flant-com/kubernetes-graceful-shutdown-nginx-php-fpm-d5ab266963c2
   lifecycle:
     preStopCommand:
-      - |-
-        kill -3 1
-        while kill -0 1;do sleep 1;done;
+      - "/bin/sh"
+      - "-c"
+      - "/bin/sleep 1; kill -QUIT 1"
   hpa:
     enabled: false
     minReplicas: 10
