@@ -64,3 +64,17 @@ Return the proper Magento prehook image name
 {{- $tag := .Values.prehook.tag | toString -}}
 {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
+{{/*
+Return the proper Magento volume-permission image name
+*/}}
+{{- define "volumepermissions.image" -}}
+{{- $enabled := .Values.customVolumePermissionsImage.enabled -}}
+{{- $registryName := .Values.customVolumePermissionsImage.registry -}}
+{{- $repositoryName := .Values.customVolumePermissionsImage.repository -}}
+{{- $tag := .Values.customVolumePermissionsImage.tag | toString -}}
+{{- if $enabled -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- else -}}
+alpine
+{{- end -}}
+{{- end -}}

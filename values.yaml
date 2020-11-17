@@ -320,3 +320,8 @@ loadBalancer:
     alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
     alb.ingress.kubernetes.io/healthcheck-port: "80"
     alb.ingress.kubernetes.io/healthcheck-path: /index.php
+customVolumePermissionsImage:
+  enabled: false
+  registry: "registry.hub.docker.com"
+  repository: "alpine"
+  tag: "3.12.1"

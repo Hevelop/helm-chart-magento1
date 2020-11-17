@@ -41,7 +41,7 @@ spec:
       {{- if or .Values.efs.enabled .Values.efs.existingPvcName }}
       initContainers:
       - name: volume-permissions
-        image: alpine
+        image: {{ template "volumepermissions.image" . }}
         command: ["/bin/sh","-c"]
         args: 
         - |

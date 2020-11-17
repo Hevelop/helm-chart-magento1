@@ -3,6 +3,7 @@
 {{- $release_name := .Release.Name }}
 {{- $release_service := .Release.Service }}
 {{- $magento_fullname := include "magento.fullname" . }}
+{{- $volumepermission_image := include "volumepermissions.image" . }}
 
 {{- range $job := .Values.jobs }}
 {{- $cron_image := printf "%s/%s:%s" $job.registry $job.repository $job.tag -}}
@@ -46,7 +47,7 @@ spec:
           {{- if or $.Values.efs.enabled $.Values.efs.existingPvcName }}
           initContainers:
           - name: volume-permissions
-            image: alpine
+            image: {{ $volumepermission_image }}
             command: ["/bin/sh","-c"]
             args: 
             - |

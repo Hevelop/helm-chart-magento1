@@ -1,5 +1,6 @@
 # Changelog
 
+- 6.6.2 add parameter for pull alpine image from specific location
 - 6.6.1 values lifecycle fix
 - 6.6.0 graceful stop for php-fpm and hhtpd
 - 6.4.7 Add parameter to enable php.ini 7.0 status page, add parameter to limit the duration of the job
