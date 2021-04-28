@@ -15,6 +15,7 @@ metadata:
     heritage: "{{ .Release.Service }}"
 spec:
   rules:
+    {{- if .Values.global.host }}
     - host: "{{ .Values.global.host }}"
       http:
         paths:
@@ -22,6 +23,7 @@ spec:
             backend:
               serviceName: {{ template "magento.fullname" . }}{{- if .Values.varnish.enabled }}-varnish{{- else }}-httpd{{- end }}
               servicePort: 80
+    {{- end }}
     {{- if .Values.global.secondaryHost }}
     - host: "{{ .Values.global.secondaryHost }}"
       http:

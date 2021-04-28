@@ -1,5 +1,6 @@
 # Changelog
 
+- 7.0.1 added check to verify if .Values.global.host is set
 - 7.0.0 added cms deployments to manage idt case
 - 6.6.2 add parameter for pull alpine image from specific location
 - 6.6.1 values lifecycle fix
