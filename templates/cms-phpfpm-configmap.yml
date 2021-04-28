@@ -1,0 +1,13 @@
+{{- if .Values.cms.phpfpm.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "magento.fullname" . }}-cms-phpfpm-configmap
+  labels:
+    app: {{ template "magento.fullname" . }}-cms-phpfpm
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+    {{- (tpl (.Files.Glob (printf "%s%s%s" "config/cms-php/" .Values.cms.phpfpm.configVersion "/fpm/*" )).AsConfig . ) | nindent 2 }}
+  {{- end }}

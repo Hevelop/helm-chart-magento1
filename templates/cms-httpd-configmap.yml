@@ -1,0 +1,13 @@
+{{- if .Values.cms.httpd.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "magento.fullname" . }}-cms-httpd-configmap
+  labels:
+    app: {{ template "magento.fullname" . }}-cms-httpd
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  {{- (tpl (.Files.Glob "config/cms-httpd/*").AsConfig . ) | nindent 2 }}
+{{- end }}

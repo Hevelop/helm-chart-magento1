@@ -1,0 +1,33 @@
+{{- if .Values.cms.httpd.enabled }}
+{{- if .Values.cms.httpd.hpa.enabled }}
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ template "magento.fullname" . }}-cms-httpd
+  labels:
+    app: {{ template "magento.fullname" . }}-cms-httpd
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  maxReplicas: {{ .Values.cms.httpd.hpa.maxReplicas }}
+  metrics:
+    {{- range $index, $val := .Values.cms.httpd.hpa.metrics }}
+    - resource:
+        name: {{ $val.name }}
+        target:
+          averageUtilization: {{ $val.target.averageUtilization }}
+          type: {{ $val.target.type }}
+      type: {{ $val.type }}
+  {{- end }}
+  minReplicas: {{ .Values.cms.httpd.hpa.minReplicas }}
+  scaleTargetRef:
+  {{- if .Capabilities.APIVersions.Has "apps/v1" }}
+    apiVersion: apps/v1
+  {{- else }}
+    apiVersion: apps/v1beta2
+  {{- end }}
+    kind: Deployment
+    name: {{ template "magento.fullname" . }}-cms-httpd
+{{- end }}
+{{- end }}

@@ -1,0 +1,17 @@
+{{- if .Values.cms.phpfpm.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "magento.fullname" . }}-cms-phpfpm
+  labels:
+    app: {{ template "magento.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  selector:
+    app: {{ template "magento.fullname" . }}-cms-phpfpm
+  ports:
+  - protocol: TCP
+    port: 9000
+{{- end }}

@@ -325,3 +325,116 @@ customVolumePermissionsImage:
   registry: "registry.hub.docker.com"
   repository: "alpine"
   tag: "3.12.1"
+cms:
+  httpd:
+    enabled: false
+    replicaCount: 1
+    registry: hevelop-docker.jfrog.io
+    repository: hevelop/httpd-m1-prod
+    tag: 0.0.1
+    TimeOut: 60
+    ProxyTimeout: 60
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ##
+    ## Configure resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      requests:
+        memory: 256Mi
+        cpu: 300m
+      limits:
+        memory: 256Mi
+        cpu: 300m
+    livenessProbe:
+      enabled: true
+    readinessProbe:
+      enabled: true
+      path: /favicon.ico
+      port: 80
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+    terminationGracePeriodSeconds: 60
+    lifecycle:
+      preStopCommand:
+        - "httpd"
+        - "-k"
+        - "graceful-stop"
+    hpa:
+      enabled: false
+      minReplicas: 5
+      maxReplicas: 20
+      metrics:
+        - name: cpu
+          type: Resource
+          target:
+            averageUtilization: 60
+            type: Utilization
+  phpfpm:
+    enabled: false
+    replicaCount: 1
+    registry: hevelop-docker.jfrog.io
+    repository: hevelop/php70-m1-prod
+    tag: 0.0.1
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Specify setting for php fpm
+    ##
+    configVersion: "7.0"
+    ## Use production or development
+    configEnv: production
+    memoryLimit: 256M
+    maxExecutionTime: 30
+    maxInputTime: 60
+    postMaxSize: 8M
+    uploadMaxFilesize: 2M
+    processManager: static
+    pmMaxChildren: 5
+    PmProcessIdleTimeout: 0
+    PmMaxRequests: 500
+    RequestTerminateTimeout: 0
+    PmStatusPathEnabled: false
+    processControlTimeout: 120s
+    ## Configure resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      requests:
+        memory: 512Mi
+        cpu: 500m
+      limits:
+        memory: 512Mi
+        cpu: 500m
+    livenessProbe:
+      enabled: true
+    readinessProbe:
+      enabled: true
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+    terminationGracePeriodSeconds: 60
+    # php-fpm need `process_control_timeout` configured to graceful shutdown correctly
+    # https://medium.com/flant-com/kubernetes-graceful-shutdown-nginx-php-fpm-d5ab266963c2
+    lifecycle:
+      preStopCommand:
+        - "/bin/sh"
+        - "-c"
+        - "/bin/sleep 1; kill -QUIT 1"
+    hpa:
+      enabled: false
+      minReplicas: 10
+      maxReplicas: 40
+      metrics:
+        - name: cpu
+          type: Resource
+          target:
+            averageUtilization: 60
+            type: Utilization

@@ -1,5 +1,6 @@
 # Changelog
 
+- 7.0.0 added cms deployments to manage idt case
 - 6.6.2 add parameter for pull alpine image from specific location
 - 6.6.1 values lifecycle fix
 - 6.6.0 graceful stop for php-fpm and hhtpd

@@ -1,0 +1,193 @@
+{{- if .Values.cms.phpfpm.enabled }}
+{{- if .Capabilities.APIVersions.Has "apps/v1" }}
+apiVersion: apps/v1
+{{- else }}
+apiVersion: apps/v1beta1
+{{- end }}
+kind: Deployment
+metadata:
+  name: {{ template "magento.fullname" . }}-cms-phpfpm
+  labels:
+    app: {{ template "magento.fullname" . }}-cms-phpfpm
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.cms.phpfpm.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: {{ .Values.cms.phpfpm.rollingUpdate.maxUnavailable }}
+      maxSurge: {{ .Values.cms.phpfpm.rollingUpdate.maxSurge }}
+  selector:
+    matchLabels:
+      app: {{ template "magento.fullname" . }}-cms-phpfpm
+  template:
+    metadata:
+      labels:
+        app: {{ template "magento.fullname" . }}-cms-phpfpm
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+      {{- if .Values.podAnnotations }}
+      annotations:
+{{ toYaml .Values.podAnnotations | indent 8 }}  
+      {{- end }}
+    spec:
+      {{- if .Values.pullSecrets }}
+      imagePullSecrets:
+        {{- range .Values.pullSecrets }}
+        - name: {{ . }}
+        {{- end}}
+      {{- end }}
+      {{- if or .Values.efs.enabled .Values.efs.existingPvcName }}
+      initContainers:
+      - name: volume-permissions
+        image: {{ template "volumepermissions.image" . }}
+        command: ["/bin/sh","-c"]
+        args: 
+        - |
+          chown -c 82:82 /efs &&
+        {{- range $index, $val := .Values.efs.containerMountPaths }}
+          chown -c 82:82 /var/www/deploy{{ $val }} &&
+        {{- end }}
+        {{- range $index, $val := .Values.logs.containerMountPaths }}
+          touch {{ $.Values.logs.containerMountPath }}/{{ $val }} && chown -c 82:82 {{ $.Values.logs.containerMountPath }}/{{ $val }} &&
+        {{- end }}
+          ls -la /var/www/deploy
+        volumeMounts:
+        - mountPath: /efs
+          name: efs
+        {{- range $index, $val := .Values.efs.containerMountPaths }}
+        - mountPath: "/var/www/deploy{{ $val }}"
+          subPath: {{ (trimPrefix "/" $val) }}
+          name: efs
+        {{- end }}
+        {{- if .Values.logs.enabled }}
+        - mountPath: "{{ $.Values.logs.containerMountPath }}"
+          name: logs
+        {{- end }}
+      {{- end }}
+      containers:
+      - name: {{ template "magento.fullname" . }}-cms-phpfpm
+        image: {{ template "phpfpm.image" . }}
+        imagePullPolicy: {{ .Values.cms.phpfpm.pullPolicy | quote }}
+        {{- if .Values.cms.phpfpm.lifecycle.preStopCommand }}
+        lifecycle:
+          preStop:
+            exec:
+              command: {{toJson .Values.cms.phpfpm.lifecycle.preStopCommand}}
+        {{- end }}
+        ports:
+        - containerPort: 9000
+        {{- if .Values.cms.phpfpm.livenessProbe.enabled }}
+        livenessProbe:
+          tcpSocket:
+            port: 9000
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.cms.phpfpm.readinessProbe.enabled }}
+        readinessProbe:
+          tcpSocket:
+            port: 9000
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+        {{- end }}
+        volumeMounts:
+        - name: phpfpm-conf
+          mountPath: /usr/local/etc/php-fpm.d/www.conf
+          subPath: www.conf
+        - name: phpfpm-conf
+          mountPath: /usr/local/etc/php/php.ini
+          subPath: php.ini-{{ .Values.cms.phpfpm.configEnv }}
+        - name: phpfpm-conf
+          mountPath: /usr/local/etc/php-fpm.d/k8s.conf
+          subPath: k8s.conf
+        {{- if or .Values.efs.enabled .Values.efs.existingPvcName }}
+        - mountPath: /efs
+          name: efs
+        {{- range $index, $val := .Values.efs.containerMountPaths }}
+        - mountPath: "/var/www/deploy{{ $val }}"
+          subPath: {{ (trimPrefix "/" $val) }}
+          name: efs
+        {{- end }}
+        {{- end }}
+        {{- if .Values.logs.enabled }}
+        {{- range $index, $val := .Values.logs.containerMountPaths }}
+        - mountPath: "{{ $.Values.logs.containerMountPath }}/{{ $val }}"
+          subPath: {{ $val }}
+          name: logs
+        {{- end }}
+        {{- end }}
+        resources:
+{{ toYaml .Values.cms.phpfpm.resources | indent 10 }}
+      {{- if .Values.logs.enabled }}
+      - name: {{ template "magento.fullname" . }}-cms-phpfpm-logs
+        image: {{ .Values.logs.image }}
+        command: ["/usr/local/bin/bash","-c"]
+        args:
+          - |
+            paths='';
+            {{- range $index, $val := .Values.logs.containerMountPaths }}
+            paths="${paths} {{ $.Values.logs.containerMountPath }}/{{ $val }}";
+            {{- end }}
+            bash /bin/multiTail.sh ${paths}
+        volumeMounts:
+          - mountPath: /efs
+            name: efs
+            {{- range $index, $val := .Values.efs.containerMountPaths }}
+          - mountPath: "/var/www/deploy{{ $val }}"
+            subPath: {{ (trimPrefix "/" $val) }}
+            name: efs
+            {{- end }}
+          {{- if .Values.logs.enabled }}
+          - mountPath: "{{ $.Values.logs.containerMountPath }}"
+            name: logs
+          {{- end }}
+          - name: sidecar-conf
+            mountPath: /bin/multiTail.sh
+            subPath: multiTail.sh
+      {{- end }}
+      volumes:
+      - name: phpfpm-conf
+        configMap:
+          name: {{ template "magento.fullname" . }}-cms-phpfpm-configmap
+          items:
+          - key: www.conf
+            path: www.conf
+          - key: php.ini-development
+            path: php.ini-development
+          - key: php.ini-production
+            path: php.ini-production
+          - key: k8s.conf
+            path: k8s.conf
+      - name: sidecar-conf
+        configMap:
+          name: {{ template "magento.fullname" . }}-sidecar
+          items:
+          - key: multiTail.sh
+            path: multiTail.sh
+      {{- if .Values.efs.enabled }}
+      - name: efs
+        persistentVolumeClaim:
+          claimName: {{ template "magento.fullname" . }}-efs-pvc
+      {{- end }}
+      {{- if .Values.logs.enabled }}
+      - name: logs
+        emptyDir: {}
+      {{- end }}
+      {{- if and .Values.efs.existingPvcName (not .Values.efs.enabled) }}
+      - name: efs
+        persistentVolumeClaim:
+          claimName: {{ .Values.efs.existingPvcName }}
+      {{- end }}
+      {{- if .Values.cms.phpfpm.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.cms.phpfpm.terminationGracePeriodSeconds }}
+      {{- end }}
+{{- end }}
