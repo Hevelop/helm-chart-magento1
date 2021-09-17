@@ -394,6 +394,7 @@ cms:
     memoryLimit: 256M
     maxExecutionTime: 30
     maxInputTime: 60
+    maxInputVars: 1000
     postMaxSize: 8M
     uploadMaxFilesize: 2M
     processManager: static

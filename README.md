@@ -1,5 +1,6 @@
 # Changelog
 
+- 7.0.3 add maxInputVars variable
 - 7.0.2 fixed wrong fpm invocation
 - 7.0.1 added check to verify if .Values.global.host is set
 - 7.0.0 added cms deployments to manage idt case
