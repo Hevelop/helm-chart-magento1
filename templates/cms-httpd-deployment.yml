@@ -49,7 +49,7 @@ spec:
         - '180s'
       containers:
       - name: {{ template "magento.fullname" . }}-cms-httpd
-        image: {{ template "httpd.image" . }}
+        image: {{ template "httpdcms.image" . }}
         imagePullPolicy: {{ .Values.cms.httpd.pullPolicy | quote }}
         {{- if .Values.cms.httpd.lifecycle.preStopCommand }}
         lifecycle:

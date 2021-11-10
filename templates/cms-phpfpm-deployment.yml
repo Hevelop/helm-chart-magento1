@@ -69,7 +69,7 @@ spec:
       {{- end }}
       containers:
       - name: {{ template "magento.fullname" . }}-cms-phpfpm
-        image: {{ template "phpfpm.image" . }}
+        image: {{ template "phpfpmcms.image" . }}
         imagePullPolicy: {{ .Values.cms.phpfpm.pullPolicy | quote }}
         {{- if .Values.cms.phpfpm.lifecycle.preStopCommand }}
         lifecycle:

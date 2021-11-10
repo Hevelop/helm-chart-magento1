@@ -26,12 +26,32 @@ Return the proper Magento httpd image name
 {{- end -}}
 
 {{/*
+Return the proper Cms httpd image name
+*/}}
+{{- define "httpdcms.image" -}}
+{{- $registryName := .Values.cms.httpd.registry -}}
+{{- $repositoryName := .Values.cms.httpd.repository -}}
+{{- $tag := .Values.cms.httpd.tag | toString -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+
+{{/*
 Return the proper Magento php-fpm image name
 */}}
 {{- define "phpfpm.image" -}}
 {{- $registryName := .Values.phpfpm.registry -}}
 {{- $repositoryName := .Values.phpfpm.repository -}}
 {{- $tag := .Values.phpfpm.tag | toString -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+
+{{/*
+Return the proper Cms php-fpm image name
+*/}}
+{{- define "phpfpmcms.image" -}}
+{{- $registryName := .Values.cms.phpfpm.registry -}}
+{{- $repositoryName := .Values.cms.phpfpm.repository -}}
+{{- $tag := .Values.cms.phpfpm.tag | toString -}}
 {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
 
